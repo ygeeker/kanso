@@ -68,11 +68,13 @@ export const TabItem: React.FC<TabItemProps> = ({
         text-sm font-sans font-medium
         whitespace-nowrap
         transition-colors duration-75
-        border-b-2
         select-none
         ${className}
       `}
-      style={currentStyles}
+      style={{
+        ...currentStyles,
+        borderBottom: active ? '2px solid var(--eink-ink)' : '2px solid transparent',
+      }}
       onMouseDown={() => setIsPressed(true)}
       onMouseUp={() => setIsPressed(false)}
       onMouseLeave={() => setIsPressed(false)}

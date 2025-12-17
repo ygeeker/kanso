@@ -135,7 +135,6 @@ export const ActionItem: React.FC<ActionItemProps> = ({
       className={`
         flex flex-col items-center justify-center
         px-2 py-1
-        rounded
         transition-colors duration-75
         text-xs font-sans
         min-w-[50px]
@@ -274,7 +273,6 @@ export const ActionBarMenu: React.FC<ActionBarMenuProps> = ({ items }) => {
         onTouchEnd={() => setIsPressed(false)}
         className="
           p-2
-          rounded
           transition-colors duration-75
           select-none
         "
@@ -288,11 +286,13 @@ export const ActionBarMenu: React.FC<ActionBarMenuProps> = ({ items }) => {
           className="
             absolute right-0 top-full mt-1
             min-w-[160px]
-            bg-[var(--eink-paper)]
-            border border-[var(--eink-border)]
-            rounded shadow-md
             py-1 z-50
           "
+          style={{
+            backgroundColor: 'var(--eink-paper)',
+            border: '1px solid var(--eink-border)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          }}
         >
           {items.map((item, index) => {
             const commonClasses = `

@@ -67,25 +67,19 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
 
 interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  cols?: 2 | 3 | 4;
 }
 
 export const Grid: React.FC<GridProps> = ({ 
   className = "", 
   children, 
-  cols = 3,
   ...props 
 }) => {
-  const colsClass = {
-    2: "grid-cols-2",
-    3: "grid-cols-3",
-    4: "grid-cols-4",
-  };
-
+  // Kindle-style horizontal scroll grid that respects item natural sizes
   return (
     <div
       className={`
-        grid ${colsClass[cols]} gap-3
+        flex gap-3 overflow-x-auto pb-2
+        scrollbar-thin
         ${className}
       `}
       {...props}
@@ -108,23 +102,38 @@ export const GridItem: React.FC<GridItemProps> = ({
   alt = "grid item",
   className = "",
 }) => {
+  const [isPressed, setIsPressed] = React.useState(false);
+
+  // Kindle-style invert on tap
+  const pressedStyles = isPressed ? {
+    filter: 'invert(1)',
+  } : {};
+
   const imageContent = (
     <div
       className={`
-        relative aspect-[3/4]
-        overflow-hidden rounded
-        bg-[var(--eink-paper-warm)]
-        border border-[var(--eink-divider)]
-        hover:border-[var(--eink-border)]
-        transition-all duration-200
-        hover:shadow-sm
+        relative
+        flex-shrink-0
+        overflow-hidden
+        transition-all duration-75
+        select-none
         ${className}
       `}
+      style={{
+        border: '1px solid var(--eink-divider)',
+        ...pressedStyles,
+      }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onMouseLeave={() => setIsPressed(false)}
+      onTouchStart={() => setIsPressed(true)}
+      onTouchEnd={() => setIsPressed(false)}
     >
       <img
         src={src}
         alt={alt}
-        className="w-full h-full object-cover"
+        className="h-32 w-auto object-contain"
+        style={{ maxWidth: '120px' }}
       />
     </div>
   );

@@ -20,10 +20,11 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
+  // Kindle buttons have sharp corners (no border radius)
   const sizeStyles = {
-    sm: "px-3 py-1.5 text-sm rounded",
-    md: "px-4 py-2 text-base rounded-md",
-    lg: "px-6 py-3 text-lg rounded-lg",
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-base",
+    lg: "px-6 py-3 text-lg",
   };
 
   // Base styles for all variants

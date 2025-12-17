@@ -127,7 +127,7 @@ export const ListItemIcon: React.FC<ListItemIconProps> = ({
     <div
       className={`
         flex-shrink-0 ml-3
-        p-1.5 rounded
+        p-1.5
         opacity-60
         transition-colors duration-75
         ${onClick ? "cursor-pointer" : ""}
