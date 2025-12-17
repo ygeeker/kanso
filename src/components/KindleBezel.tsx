@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
+import { DialogPortalContext } from "@/contexts/dialogPortal";
 
 interface KindleBezelProps {
   children: React.ReactNode;
@@ -21,6 +22,9 @@ interface KindleBezelProps {
 const SCREEN_ASPECT_RATIO = 7 / 10;
 
 const KindleBezel: React.FC<KindleBezelProps> = ({ children, dark = false }) => {
+  const desktopPortalRef = useRef<HTMLDivElement>(null);
+  const mobilePortalRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className={dark ? "dark" : ""} data-theme={dark ? "dark" : "light"}>
       {/* Desktop/Tablet: Show device frame with locked aspect ratio */}
@@ -106,16 +110,24 @@ const KindleBezel: React.FC<KindleBezelProps> = ({ children, dark = false }) => 
                   }}
                 />
 
-                {/* Actual content area */}
+                {/* Dialog portal target - at screen level, above content */}
                 <div 
-                  className="relative z-0 h-full overflow-y-auto scrollbar-thin"
-                  style={{ 
-                    backgroundColor: 'var(--eink-paper)',
-                    color: 'var(--eink-ink)'
-                  }}
-                >
-                  {children}
-                </div>
+                  ref={desktopPortalRef}
+                  className="absolute inset-0 z-50 pointer-events-none [&>*]:pointer-events-auto"
+                />
+
+                {/* Actual content area */}
+                <DialogPortalContext.Provider value={{ portalRef: desktopPortalRef }}>
+                  <div 
+                    className="relative z-0 h-full overflow-y-auto overflow-x-hidden scrollbar-thin"
+                    style={{ 
+                      backgroundColor: 'var(--eink-paper)',
+                      color: 'var(--eink-ink)'
+                    }}
+                  >
+                    {children}
+                  </div>
+                </DialogPortalContext.Provider>
               </div>
             </div>
           </div>
@@ -124,13 +136,20 @@ const KindleBezel: React.FC<KindleBezelProps> = ({ children, dark = false }) => 
 
       {/* Mobile (xs/sm): Full screen without bezel */}
       <div 
-        className="md:hidden min-h-screen overflow-y-auto"
+        className="md:hidden min-h-screen overflow-y-auto relative"
         style={{ 
           backgroundColor: 'var(--eink-paper)',
           color: 'var(--eink-ink)'
         }}
       >
-        {children}
+        {/* Dialog portal target for mobile */}
+        <div 
+          ref={mobilePortalRef}
+          className="fixed inset-0 z-50 pointer-events-none [&>*]:pointer-events-auto"
+        />
+        <DialogPortalContext.Provider value={{ portalRef: mobilePortalRef }}>
+          {children}
+        </DialogPortalContext.Provider>
       </div>
     </div>
   );

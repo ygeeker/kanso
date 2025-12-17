@@ -2,10 +2,12 @@
 
 import React, { useEffect, useRef } from "react";
 import { CloseIcon } from "./Icons";
+import { DialogPortal } from "@/contexts/dialogPortal";
 
 /**
  * Kindle-style Dialog Components
  * Modal dialogs that match the E-ink aesthetic
+ * Dialogs are portaled to the screen level for proper centering within Kindle bezel
  */
 
 interface DialogProps {
@@ -24,21 +26,19 @@ export const Dialog: React.FC<DialogProps> = ({ open, onClose, children }) => {
     
     if (open) {
       document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
     }
     
     return () => {
       document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "";
     };
   }, [open, onClose]);
 
   if (!open) return null;
 
-  return (
+  const dialogContent = (
     <div
       className="
-        fixed inset-0 z-50
+        absolute inset-0
         flex items-center justify-center
       "
       style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
@@ -50,7 +50,7 @@ export const Dialog: React.FC<DialogProps> = ({ open, onClose, children }) => {
         ref={dialogRef}
         className="
           relative
-          w-full max-w-md mx-4
+          w-[90%] max-w-sm
         "
         style={{
           backgroundColor: 'var(--eink-paper)',
@@ -65,12 +65,11 @@ export const Dialog: React.FC<DialogProps> = ({ open, onClose, children }) => {
           className="
             absolute top-3 right-3
             p-1
-            text-[var(--eink-ink-muted)]
-            hover:text-[var(--eink-ink)]
-            hover:bg-[var(--eink-paper-warm)]
-            rounded
-            transition-colors duration-150
+            select-none
           "
+          style={{
+            color: 'var(--eink-ink-muted)',
+          }}
           aria-label="Close dialog"
         >
           <CloseIcon size={18} />
@@ -79,6 +78,8 @@ export const Dialog: React.FC<DialogProps> = ({ open, onClose, children }) => {
       </div>
     </div>
   );
+
+  return <DialogPortal>{dialogContent}</DialogPortal>;
 };
 
 interface DialogTitleProps {
