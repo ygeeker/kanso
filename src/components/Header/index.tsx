@@ -39,8 +39,6 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const router = useRouter();
   const t = useTranslations();
-  const tNav = useTranslations("nav");
-  const tNavbarMenu = useTranslations("navbarMenu");
 
   const [open, setOpen] = useState<boolean>(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -90,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({
           siginal: 3,
         }}
         battery={86}
-        deviceName="Rene Wang"
+        deviceName={t("nav.deviceName")}
       />
       <ActionBar>
         <ActionGroup>
@@ -101,7 +99,7 @@ const Header: React.FC<HeaderProps> = ({
             changeFill={false}
           >
             <HomeOutlineIcon />
-            {tNav("homePage")}
+            <span style={{ textWrap: "nowrap" }}>{t("nav.homePage")}</span>
           </ActionItem>
           <ActionItem
             onClick={() => {
@@ -110,7 +108,7 @@ const Header: React.FC<HeaderProps> = ({
             changeFill={false}
           >
             <ArrowBackSharpIcon />
-            {tNav("back")}
+            <span style={{ textWrap: "nowrap" }}>{t("nav.back")}</span>
           </ActionItem>
           <ActionItem
             onClick={() => {
@@ -118,7 +116,7 @@ const Header: React.FC<HeaderProps> = ({
             }}
           >
             <CogSharpIcon />
-            {tNav("settings")}
+            <span style={{ textWrap: "nowrap" }}>{t("nav.settings")}</span>
           </ActionItem>
         </ActionGroup>
         <ActionBarSpace />
@@ -144,21 +142,18 @@ const Header: React.FC<HeaderProps> = ({
                 href: "https://x.com/renewang",
               },
               {
-                textPrimary: tNavbarMenu("about"),
+                textPrimary: t("nav.about"),
                 onClick: handleClick,
               },
             ]}
           />
-          <Dialog
-            open={open}
-            onClose={handleClose}
-          >
+          <Dialog open={open} onClose={handleClose}>
             <DialogTitle>About</DialogTitle>
             <DialogContent>
               <p>
-                Hello, I'm Rene Wang. I'm a software engineer and a
-                designer. I'm a fan of technology and design. I'm
-                a fan of technology and design.
+                Hello, I'm Rene Wang. I'm a software engineer and a designer.
+                I'm a fan of technology and design. I'm a fan of technology and
+                design.
               </p>
             </DialogContent>
             <DialogAction>
