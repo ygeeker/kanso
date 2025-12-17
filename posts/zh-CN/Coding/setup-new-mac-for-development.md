@@ -2,6 +2,9 @@
 title: 2024 年 macOS 开发环境配置指南
 date: 2024-06-06T12:00:00.000Z
 summary: 本文将指导你如何将一台新 Mac 配置成开发机器
+keywords:
+  - Apple
+  - Mac
 ---
 
 

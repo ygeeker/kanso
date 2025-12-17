@@ -2,6 +2,10 @@
 title: 7个提高用户捐赠意愿的产品小技巧
 date: 2024-06-13
 summary: 开源项目的盈利方式之一便是“捐赠”，好多开发者抱怨没什么人捐赠。本文分享一些提高捐赠意愿的小技巧。
+keywords:
+  - Donation Strategies
+  - User Engagement
+  - Open Source
 ---
 
 

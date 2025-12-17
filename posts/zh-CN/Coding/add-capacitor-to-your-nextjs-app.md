@@ -2,6 +2,8 @@
 title: NextJS App 改造原生 App 的完美指南
 date: 2024-05-02
 summary: 本文将介绍我如何把一个纯 Web App 改造为优雅的原生 App，让这个产品支持多终端运行。
+keywords:
+  - Open Source
 ---
 
 

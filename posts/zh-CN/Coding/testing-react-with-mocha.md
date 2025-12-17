@@ -2,6 +2,8 @@
 title: 使用 Mocha + chai 测试 React 应用
 date: 2023-04-12T01:23:00.000Z
 summary:  ---    最近在继续开发之前的 [Kindle UI](https://github.com/
+keywords:
+  - Open Source
 ---
 
 
@@ -130,6 +132,8 @@ module.exports = function getBabelConfig(api) {
 
 此处列举一些常见测试场景供参考：
 
+### 检查组件类型
+
 ```plain text
 import * as React from "react";
 import { expect } from "chai";
@@ -154,6 +158,8 @@ describe("<ListItem />", () => {
 });
 
 ```
+
+### 检查渲染结果
 
 ```plain text
 it("render in Container", () => {

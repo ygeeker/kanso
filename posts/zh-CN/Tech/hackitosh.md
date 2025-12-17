@@ -56,6 +56,8 @@ Intel 的集显(HD+一些数字)、AMD 的独立显卡大多都可驱动，这�
 
 ## **下载工作**
 
+### *必须下载*
+
 ~~这里的文件~~~~[参考](https://dortania.github.io/OpenCore-Install-Guide/ktext.html#must-haves)~~~~部分软件~~
 请记住他的别称（打在括号里的）
 
@@ -107,6 +109,8 @@ diskgeunis(区分工具)百度去下
 
 [AMDRadeonGPU](https://github.com/aluveitie/RadeonSensor)
 
+### **显卡**
+
 *Intel 核显 （也就是整个电脑没有显卡）*
 
 直接用这个[OC 工具箱](https://www.123pan.com/s/rd39-MkpOd)特别省事
@@ -132,12 +136,16 @@ AMD 显卡要么就是免驱
 
 且你刚好会 C++，接触过逆向工程。欢迎联系我
 
+### **声卡**
+
 声卡部分，由于不同品牌的网卡有不同的驱动方式
 
 有些事注入 ID 就好，有些需要单独加驱动，有些又无法驱动
 
 在此我帮你搜到了全网的大部分声卡驱动，剩下的你自己测试
 [声卡](https://radcliffe.vercel.app/post/hei-ping-guo-sheng-qia-qu-dong/)
+
+### **网卡**
 
 网卡部分 intel 的看[Intel](https://zhuanlan.zhihu.com/p/299695036)
 
@@ -157,6 +165,8 @@ AMD 显卡要么就是免驱
 
 请将下载好的文件分好类。
 
+### *地基*
+
 将「最简 EFI」解压到你找到地方
 
 删除 Tools 文件夹下的所有东西
@@ -164,6 +174,8 @@ AMD 显卡要么就是免驱
 把 Drivers 文件下删得只剩 OpenRuntime.efi 「！仔细理解这句话！」
 
 把[这个](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/HfsPlus.efi)放在 Drivers 里面
+
+### *ACIP*
 
 ~~这一步的目的是让系统可以控制硬件，软件控制硬件
 ~~~~[参考](https://www.bilibili.com/read/cv10117507/)~~
@@ -215,3 +227,129 @@ Scope (_SB.PCI0.LPC)
 
 5.编译
 用这个指令
+
+```plain text
+acpihelp.exe -o 文件名字
+
+```
+
+**把「文件名字」 依次换成 刚刚变出来的 5 个文件**
+最后你需要确保 你可以看到 5 个以 XXX.aml 结尾的文件。
+
+6.现在，请新建一个文件夹，把文件放入，命名为「ACPI」替换在「最简 EFI』文件夹里
+
+### *配置 OpenCoreCFG*
+
+[请看](https://post.smzdm.com/p/aqm8nxvx/)，这个部分这个作者写的好，请看他
+
+以后会考虑自己写
+
+### *组装*
+
+将 **kexts 文件夹** **ACPI** 放在「最简 EFI 里」
+
+这个时候你的「最简 EFI」里会有 图 1.1 1.2
+
+![Image](/image/post/13b3032c-0204-4b35-9569-c515d16027a1_xS2aDI.png)
+
+![Image](/image/post/8882f2b3-b890-4822-8333-db70fa06eb71_xS2hV0.png)
+
+将你的「最简 EFI」重命名为 EFI
+
+```plain text
+休息下吧，看到这里
+
+辛苦啦
+
+这一步之后，就要正式开始安装了
+
+```
+
+## **开始安装**
+
+### 1.写盘
+
+用「写盘工具」将你下载映像写入 U 盘
+
+~~如果你卡在 Vailting 这个地方 跳过就好~~
+
+对于小白：当你同时看到绿色的进度条和 Skip 这个单词时直接点 **skip**
+
+### 2.进入 BIOS
+
+*以你的毕生所学，进入 bios 并且关闭（没有的不管）*
+
+```plain text
+Fast Boot
+Secure Boot
+Serial/COM Port
+Parallel Port
+VT-d
+CSM
+Thunderbolt（有些没有驱动）
+Intel SGX
+Intel Platform Trust
+CFG Lock(可以的话)
+
+```
+
+*打开*
+
+```plain text
+VT-x
+Above 4G decoding
+Hyper-Threading
+Execute Disable Bit
+EHCI/XHCI Hand-off
+OS type: other
+UEFI Mode
+DVMT Pre-Allocated: 64MB
+SATA Mode: AHCI
+
+```
+
+### 3.Boot up
+
+从你的 U 盘启动
+
+### 4.安装
+
+一、请将安装程序调成你熟悉的语言，最好不要登陆 Apple ID、不要
+
+如果你发现你下载的镜像是俄语的，且找不到地方修改它
+
+请使用翻译软件，推荐 *谷歌翻译*
+
+二、如果你是在安装 Catalina(10.15.x)之前的系统，请[参考](https://www.applex.net/threads/macos-mojave.93508/)
+
+### 善后
+
+现在，不出意外，你应该在系统里面了，
+
+有部分网卡、声卡需要别的操作的，请按照对应的教程进行
+
+三码注入部分,前面配置*OpenCoreCFG*部分
+
+另一位作者已经提到，不再赘述
+
+## 尾言
+
+文章写得很赶，有些东西自己也不太会。希望大家有耐心慢慢搞。
+
+苹果发布 M1 型片后，就不知道黑苹果还能活多久。且行且珍惜
+
+如果你是 vega8 用户，又刚好会 C++写驱动，可以带你去找找国外的进度
+
+感谢那些曾经为黑苹果默默做出贡献的开发者！
+
+此致
+
+——————————————————————————
+
+转载请注明出处，可以二创。
+
+如果你在安装时遇到问题，可在电报上联系我：[Charles](https://www.notion.so/rivertwilight/t.me/Mistry_Rain)
+
+所有的操作均来自互联网，遇到问题请你自己负责！
+
+文章已授权 [Gloridust](https://gloridust.xyz/) [Rene](https://rene.wang/)发布

@@ -3,6 +3,9 @@ title: 粤语学习不完全指南
 date: 2023-05-23
 summary: 本文面向希望学习粤语的母语为中文人士。
 cover: https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcelebwiki.org%2Fwp-content%2Fuploads%2F2018%2F07%2Feason-chan_92630-780x405.jpeg&f=1&nofb=1&ipt=e9824591e6a1bdc694f93269de856bb43c161dea53d220cc8a4f06dc492a3cd1&ipo=images
+keywords:
+  - 粤语
+  - 语言学习
 ---
 
 

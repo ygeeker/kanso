@@ -143,3 +143,19 @@ summary: 中国高校离散结构课程期末总结及技巧
 - 有向图的关联矩阵：两点之间无边（无关联）则为0，$$ v_i $$ 为起点则为1，为终点则为-1
 
 
+
+## 树
+
+树其实是一种特殊的无向图。具体来说，不含回路的连通无向图称为无向树，简称树。
+
+
+
+## 参考文献
+- [https://devdocs.io/latex/math-symbols](https://devdocs.io/latex/math-symbols)
+- [https://ashki23.github.io/markdown-latex.html#matrices](https://ashki23.github.io/markdown-latex.html#matrices)
+
+
+
+
+
+

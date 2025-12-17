@@ -61,6 +61,8 @@ Magsik 的工作原理是直接把 API 写入系统的 boot.img 中，其安装�
 
 ## 其他资源
 
+### 系统增强 APP
+
 这些 app 弥补了类原生系统的一些缺陷，或者增强了其功能。
 - 炼妖壶：可以在沙盒中运行一些 app，并且相当于“双开”，例如微信、QQ、支付宝等。
 - Shizuku： 应用权限管理
@@ -69,12 +71,16 @@ Magsik 的工作原理是直接把 API 写入系统的 boot.img 中，其安装�
 - Google Camera：安卓平台最强相机
 - SD Maid SE：老牌垃圾清理软件
 
+### 清理 MIUI 毒瘤应用
+
 ```shell
 adb uninstall -k --user 0 com.miui.analytics
 adb uninstall -k --user 0 com.miui.analytics.service
 adb uninstall -k --user 0 com.miui.bugreport
 # 更多包名可自行进入设置查看
 ```
+
+### 链接
 - 小米设备代号查询：[https://miuiver.com/xiaomi-device-codename/](https://miuiver.com/xiaomi-device-codename/)
 - MIUI 官方下载：[https://www.miui.com/download.html](https://www.miui.com/download.html)
 - MIUI 历史版本下载：[https://miuiver.com/](https://miuiver.com/)

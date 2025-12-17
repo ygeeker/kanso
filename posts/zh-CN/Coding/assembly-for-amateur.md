@@ -1,17 +1,21 @@
 ---
 title: 汇编语言入门
 date: 2024-05-07
-summary:  ## 前置知识  首先，将汇编代码转换为机器码：  ```shell $ yasm -f mach
+summary:  ## 前置知识  ### 在 Intel 平台运行汇编程序  首先，将汇编代码转换为机器码：  `
 ---
 
 
 ## 前置知识
+
+### 在 Intel 平台运行汇编程序
 
 首先，将汇编代码转换为机器码：
 
 ```shell
 $ yasm -f macho64 hello-world.asm
 ```
+
+### 在 ARM 平台上运行
 
 
 

@@ -58,10 +58,14 @@ What’s more, as Figma display a “Project/Filename” at the top of the edito
 
 Use components and variables across your team to streamline your design process. Components are reusable design elements, while variables allow you to define and manage design tokens.
 
+### Components
+
 Components in Figma are powerful tools for maintaining consistency and efficiency:
 - Create components for frequently used elements like buttons, icons, and form fields.
 - Use instances of components across your designs for easy updates and maintenance.
 - Utilize variants to create flexible components with different states or styles.
+
+### Variables
 
 Variables in Figma help manage design tokens and create more dynamic designs:
 - Define color, typography, and spacing variables for consistent branding.
