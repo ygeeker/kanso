@@ -51,7 +51,7 @@ const Layout = (props: {
     <ColorSchemeProvider value={{ colorScheme, setColorScheme }}>
       <DeviceSettingsProvider>
         <KindleBezel dark={colorScheme === "dark"}>
-          <div ref={containerEle} className="h-full">
+          <div ref={containerEle}>
             <Header
               menuItems={menuItems}
               lang={locale}
@@ -59,6 +59,8 @@ const Layout = (props: {
               siteConfig={siteConfig}
               containerEle={containerEle}
             />
+            {/* Spacer for fixed navbar on mobile */}
+            <div className="h-[88px] md:hidden" />
             <main className="min-h-[80vh] pb-8 px-4 md:px-6">
               {children}
             </main>

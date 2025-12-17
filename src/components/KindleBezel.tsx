@@ -136,7 +136,7 @@ const KindleBezel: React.FC<KindleBezelProps> = ({ children, dark = false }) => 
 
       {/* Mobile (xs/sm): Full screen without bezel */}
       <div 
-        className="md:hidden min-h-screen overflow-y-auto relative"
+        className="md:hidden h-screen overflow-y-auto overflow-x-hidden relative"
         style={{ 
           backgroundColor: 'var(--eink-paper)',
           color: 'var(--eink-ink)'

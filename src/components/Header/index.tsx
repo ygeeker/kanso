@@ -84,11 +84,6 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <Navbar autoClose fixed>
       <StatuBar
-        celluar={{
-          on: true,
-          label: "LTE",
-          siginal: 3,
-        }}
         battery={86}
         deviceName={t("nav.deviceName")}
       />
