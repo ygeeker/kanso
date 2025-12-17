@@ -1,7 +1,7 @@
 "use client";
 
 import { TLocale } from "@/types/index";
-import { List, ListItem, ListItemText } from "@kindle-ui/core";
+import { List, ListItem, ListItemText } from "@/components/ui";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 

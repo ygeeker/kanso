@@ -7,7 +7,7 @@ import CodeBlock from "@/components/CodeBlock";
 import ImageBlock from "@/components/ImageBlock";
 import HeadingBlock from "@/components/HeadingBlock";
 import FrameBlock from "@/components/FrameBlock";
-import { Typography, TimeBar } from "@kindle-ui/core";
+import { Typography } from "@/components/ui";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
@@ -58,7 +58,12 @@ const StyledArticlePage = styled.div`
   }
 `;
 
-const ArticlePage = ({ id, postProps, postContent, locale }) => {
+const ArticlePage = ({ id, postProps, postContent, locale }: {
+  id: string;
+  postProps: any;
+  postContent: string;
+  locale: string;
+}) => {
   if (!postProps) return null;
 
   return (
@@ -75,7 +80,7 @@ const ArticlePage = ({ id, postProps, postContent, locale }) => {
         <Typography itemScope itemType="http://schema.org/Article">
 
           <h1 itemProp="headline">{postProps.title}</h1>
-          <div className="Textc(secondary)">
+          <div className="text-[var(--eink-ink-muted)] text-sm mb-4">
             <time itemProp="datePublished" dateTime={postProps.date}>
               {formatDate(postProps.date, locale)}
             </time>

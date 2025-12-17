@@ -1,6 +1,285 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
+@import "tailwindcss";
+
+/**
+ * =============================================================================
+ * ************   E-Ink Color Palette   ************
+ * Mimics Amazon Kindle e-reader display characteristics
+ * =============================================================================
+ */
+
+@theme {
+  /* E-ink paper colors */
+  --color-eink-paper: #f5f1e8;
+  --color-eink-paper-warm: #efe9dc;
+  --color-eink-paper-highlight: #faf8f3;
+  
+  /* E-ink ink colors */
+  --color-eink-ink: #1a1a18;
+  --color-eink-ink-secondary: #3d3d3a;
+  --color-eink-ink-tertiary: #6b6b66;
+  --color-eink-ink-muted: #8a8a84;
+  
+  /* E-ink UI elements */
+  --color-eink-divider: #d4d0c4;
+  --color-eink-border: #c9c4b5;
+  
+  /* Bezel colors */
+  --color-bezel-outer: #2c2c2c;
+  --color-bezel-inner: #1f1f1f;
+  --color-bezel-accent: #404040;
+  
+  /* Device background */
+  --color-device-bg: #d6d6d6;
+  --color-device-bg-start: #e0e0e0;
+  --color-device-bg-end: #c0c0c0;
+
+  /* Typography */
+  --font-serif: 'Bookerly', 'Noto Serif SC', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Amazon Ember', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Box shadows */
+  --shadow-kindle-bezel: 0 20px 60px -10px rgba(0, 0, 0, 0.6), 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+  --shadow-kindle-screen: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  /* Border radius */
+  --radius-kindle: 2rem;
+  --radius-kindle-screen: 0.375rem;
+}
+
+:root {
+  /* === LIGHT MODE (Default) === */
+  /* E-ink paper colors - warm, slightly cream-toned */
+  --eink-paper: #f5f1e8;
+  --eink-paper-warm: #efe9dc;
+  --eink-paper-highlight: #faf8f3;
+  
+  /* E-ink ink colors - not pure black, slightly warm */
+  --eink-ink: #1a1a18;
+  --eink-ink-secondary: #3d3d3a;
+  --eink-ink-tertiary: #6b6b66;
+  --eink-ink-muted: #8a8a84;
+  
+  /* E-ink UI elements */
+  --eink-divider: #d4d0c4;
+  --eink-border: #c9c4b5;
+  --eink-shadow: rgba(0, 0, 0, 0.08);
+  
+  /* Kindle device bezel colors */
+  --bezel-outer: #2c2c2c;
+  --bezel-inner: #1f1f1f;
+  --bezel-accent: #404040;
+  --bezel-highlight: rgba(255, 255, 255, 0.05);
+  --bezel-shadow: rgba(0, 0, 0, 0.6);
+  
+  /* Background behind device */
+  --device-bg: #d6d6d6;
+  --device-bg-gradient-start: #e0e0e0;
+  --device-bg-gradient-end: #c0c0c0;
+  
+  /* Semantic colors */
+  --color-background: var(--eink-paper);
+  --color-surface: var(--eink-paper-warm);
+  --color-text-primary: var(--eink-ink);
+  --color-text-secondary: var(--eink-ink-secondary);
+  --color-text-muted: var(--eink-ink-muted);
+  --color-border: var(--eink-border);
+  --color-divider: var(--eink-divider);
+  
+  /* Typography */
+  --font-serif: 'Bookerly', 'Noto Serif SC', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Amazon Ember', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* === DARK MODE === */
+/* E-ink dark mode is distinct - uses warm grays, not pure blacks */
+[data-theme="dark"],
+.dark {
+  --eink-paper: #262622;
+  --eink-paper-warm: #2d2d28;
+  --eink-paper-highlight: #333330;
+  
+  --eink-ink: #e8e6df;
+  --eink-ink-secondary: #c9c7c0;
+  --eink-ink-tertiary: #9a9890;
+  --eink-ink-muted: #6e6d68;
+  
+  --eink-divider: #3d3d38;
+  --eink-border: #4a4a44;
+  --eink-shadow: rgba(0, 0, 0, 0.25);
+  
+  --bezel-outer: #1a1a1a;
+  --bezel-inner: #0f0f0f;
+  --bezel-accent: #2a2a2a;
+  --bezel-highlight: rgba(255, 255, 255, 0.03);
+  --bezel-shadow: rgba(0, 0, 0, 0.8);
+  
+  --device-bg: #1e1e1e;
+  --device-bg-gradient-start: #252525;
+  --device-bg-gradient-end: #151515;
+  
+  --color-background: var(--eink-paper);
+  --color-surface: var(--eink-paper-warm);
+  --color-text-primary: var(--eink-ink);
+  --color-text-secondary: var(--eink-ink-secondary);
+  --color-text-muted: var(--eink-ink-muted);
+  --color-border: var(--eink-border);
+  --color-divider: var(--eink-divider);
+}
+
+/* System preference dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --eink-paper: #262622;
+    --eink-paper-warm: #2d2d28;
+    --eink-paper-highlight: #333330;
+    
+    --eink-ink: #e8e6df;
+    --eink-ink-secondary: #c9c7c0;
+    --eink-ink-tertiary: #9a9890;
+    --eink-ink-muted: #6e6d68;
+    
+    --eink-divider: #3d3d38;
+    --eink-border: #4a4a44;
+    --eink-shadow: rgba(0, 0, 0, 0.25);
+    
+    --bezel-outer: #1a1a1a;
+    --bezel-inner: #0f0f0f;
+    --bezel-accent: #2a2a2a;
+    --bezel-highlight: rgba(255, 255, 255, 0.03);
+    --bezel-shadow: rgba(0, 0, 0, 0.8);
+    
+    --device-bg: #1e1e1e;
+    --device-bg-gradient-start: #252525;
+    --device-bg-gradient-end: #151515;
+    
+    --color-background: var(--eink-paper);
+    --color-surface: var(--eink-paper-warm);
+    --color-text-primary: var(--eink-ink);
+    --color-text-secondary: var(--eink-ink-secondary);
+    --color-text-muted: var(--eink-ink-muted);
+    --color-border: var(--eink-border);
+    --color-divider: var(--eink-divider);
+  }
+}
+
+/**
+ * =============================================================================
+ * ************   Base E-ink Styles   ************
+ * =============================================================================
+ */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: var(--font-serif);
+  color: var(--color-text-primary);
+  background-color: var(--device-bg);
+}
+
+/* Links inherit E-ink ink color */
+a {
+  color: inherit;
+  text-decoration-color: var(--eink-ink-tertiary);
+}
+
+a:hover {
+  text-decoration-color: var(--eink-ink);
+}
+
+/* Code blocks with monospace font */
+code, pre {
+  font-family: 'Inconsolata', 'Monaco', 'Consolas', 'Courier New', Courier, monospace;
+  background-color: var(--eink-paper-warm);
+  border-radius: 4px;
+}
+
+code {
+  padding: 0.125em 0.25em;
+}
+
+pre {
+  padding: 1em;
+  overflow-x: auto;
+}
+
+/* Article text handling */
+article {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.7;
+}
+
+/* E-ink styled scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: var(--eink-divider);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: var(--eink-ink-muted);
+}
+
+/* Selection styling for E-ink feel */
+::selection {
+  background-color: var(--eink-ink-muted);
+  color: var(--eink-paper);
+}
+
+/**
+ * =============================================================================
+ * ************   Animations   ************
+ * =============================================================================
+ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from { 
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.2s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.2s ease-out;
+}
 
 /**
  * =============================================================================

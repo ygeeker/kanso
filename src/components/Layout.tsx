@@ -1,137 +1,68 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Head from "next/head";
-import { Container, KindleOasis } from "@kindle-ui/core";
 import Header from "@/components/Header";
-import RelatedLink from "@/components/RelatedLinks";
+import KindleBezel from "@/components/KindleBezel";
 import { ICurrentPage, ISiteConfig } from "@/types/index";
 import { ColorSchemeProvider } from "@/contexts/colorScheme";
 import "kindle-fonts/bookerly.css";
 import "kindle-fonts/amazon-ember.css";
-import styled, { createGlobalStyle } from "styled-components";
-
-const GlobalStyle = createGlobalStyle`
-  * a {
-	color: inherit;
-  }
-
-  body {
-    margin: 0;
-    overflow-x: hidden;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    font-family: -apple-system, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell,
-      Noto Sans, sans-serif, BlinkMacSystemFont, Helvetica Neue, PingFang SC,
-      Hiragino Sans GB, Microsoft YaHei, Arial;
-      
-    @media (min-width: 767px) {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: rgb(210, 210, 210);
-
-      @media (prefers-color-scheme: dark) {
-        background-color: rgb(30, 30, 30);
-      }
-    }
-  }
-
-  code {
-    font-family: Inconsolata, Monaco, Consolas, "Courier New", Courier, monospace;
-  }
-
-  article {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-`;
-
-const PlatformSection = styled.section`
-  @media (min-width: 767px) {
-    display: flex;
-    justify-content: center;
-  }
-`;
-
-const MainContent = styled.main`
-  background-color: var(--bg-color);
-  min-height: 80vh;
-
-  @media (min-width: 767px) {
-    width: 100%;
-    padding-bottom: 30px;
-  }
-`;
 
 const Layout = (props: {
   /**网站配置 */
-  siteConfig: ISiteConfig;
+  siteConfig?: ISiteConfig;
   /**全部文章 */
-  allPosts: ISiteConfig[];
+  allPosts?: ISiteConfig[];
   /** 当前页面 */
-  currentPage: ICurrentPage;
+  currentPage?: ICurrentPage;
   locale?: string;
-  children: JSX.Element | JSX.Element[];
-  menuItems: any[];
+  children: React.ReactNode;
+  menuItems?: any[];
 }) => {
   const { currentPage, siteConfig, locale, children, menuItems = [] } = props;
 
-  const [colorScheme, setColorScheme] = useState("light");
-  const containerEle = useRef(null);
+  const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
+  const containerEle = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Check if there's a saved preference in localStorage
-    const localStoragePreference = localStorage.getItem(
-      "COLOR_SCHEME_PREFERENCE"
-    );
+    // Query the system preference for color scheme
+    const darkMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setColorScheme(darkMediaQuery.matches ? "dark" : "light");
 
-    // if (localStoragePreference) {
-    if (false) {
-      setColorScheme(localStoragePreference);
-    } else {
-      // Query the media preference if no preference is saved in localStorage
-      const darkMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    // Listen for changes in system preference
+    const handleChange = (e: MediaQueryListEvent) => {
+      setColorScheme(e.matches ? "dark" : "light");
+    };
+    darkMediaQuery.addEventListener("change", handleChange);
 
-      setColorScheme(darkMediaQuery.matches ? "dark" : "light");
-    }
+    return () => darkMediaQuery.removeEventListener("change", handleChange);
   }, []);
 
   useEffect(() => {
-    const container = document.querySelector(".content");
-
+    // Reset scroll position when page changes
+    const container = containerEle.current;
     if (container) {
       container.scrollTop = 0;
     }
   }, [currentPage]);
 
   return (
-    <>
-      <GlobalStyle />
-      <ColorSchemeProvider value={{ colorScheme, setColorScheme }}>
-        <PlatformSection id="platform">
-          <Container dark={colorScheme === "dark"} deviceFrame={KindleOasis}>
-            <div ref={containerEle}>
-              <Header
-                menuItems={menuItems}
-                lang={locale}
-                currentPage={currentPage}
-                siteConfig={siteConfig}
-                containerEle={containerEle}
-              />
-              <MainContent>
-                <div>{children}</div>
-                <br></br>
-                {/* <RelatedLink
-									links={siteConfig.relatedLinks}
-									locale={locale}
-								/> */}
-              </MainContent>
-            </div>
-          </Container>
-        </PlatformSection>
-      </ColorSchemeProvider>
-    </>
+    <ColorSchemeProvider value={{ colorScheme, setColorScheme }}>
+      <KindleBezel dark={colorScheme === "dark"}>
+        <div ref={containerEle} className="h-full">
+          <Header
+            menuItems={menuItems}
+            lang={locale}
+            currentPage={currentPage}
+            siteConfig={siteConfig}
+            containerEle={containerEle}
+          />
+          <main className="min-h-[80vh] pb-8 px-4 md:px-6">
+            {children}
+          </main>
+        </div>
+      </KindleBezel>
+    </ColorSchemeProvider>
   );
 };
 

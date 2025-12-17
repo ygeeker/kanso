@@ -19,12 +19,12 @@ import {
   HomeOutlineIcon,
   CogSharpIcon,
   DialogTitle,
-} from "@kindle-ui/core";
+} from "@/components/ui";
 import { useTranslations } from "next-intl";
 import { ICurrentPage, ISiteConfig } from "@/types/index";
 
 interface HeaderProps {
-  siteConfig: ISiteConfig;
+  siteConfig?: ISiteConfig;
   currentPage?: ICurrentPage;
   lang?: string;
   containerEle: any;
@@ -33,7 +33,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   siteConfig,
-  menuItems,
+  menuItems = [],
   currentPage,
   lang,
 }) => {
@@ -52,12 +52,13 @@ const Header: React.FC<HeaderProps> = ({
     setOpen(false);
   };
 
-  var pageMenuItems = [];
+  var pageMenuItems: any[] = [];
 
   useEffect(() => {
-    if (screen.width > 768 && window.location.pathname.match(/\/p\/.+/)) {
+    if (typeof window !== 'undefined' && screen.width > 768 && window.location.pathname.match(/\/p\/.+/)) {
       const handleScroll = () => {
         const container = document.querySelector(".content");
+        if (!container) return;
 
         const currentScrollPos = container.scrollTop;
 
@@ -68,12 +69,13 @@ const Header: React.FC<HeaderProps> = ({
       };
 
       const container = document.querySelector(".content");
+      if (container) {
+        container.addEventListener("scroll", handleScroll);
 
-      container.addEventListener("scroll", handleScroll);
-
-      return () => {
-        container.removeEventListener("scroll", handleScroll);
-      };
+        return () => {
+          container.removeEventListener("scroll", handleScroll);
+        };
+      }
     }
   }, [prevScrollPos, currentPage]);
 
@@ -98,8 +100,8 @@ const Header: React.FC<HeaderProps> = ({
             }}
             changeFill={false}
           >
-            <HomeOutlineIcon />
-            <span style={{ textWrap: "nowrap" }}>{t("nav.homePage")}</span>
+            <HomeOutlineIcon size={18} />
+            <span className="whitespace-nowrap">{t("nav.homePage")}</span>
           </ActionItem>
           <ActionItem
             onClick={() => {
@@ -107,16 +109,16 @@ const Header: React.FC<HeaderProps> = ({
             }}
             changeFill={false}
           >
-            <ArrowBackSharpIcon />
-            <span style={{ textWrap: "nowrap" }}>{t("nav.back")}</span>
+            <ArrowBackSharpIcon size={18} />
+            <span className="whitespace-nowrap">{t("nav.back")}</span>
           </ActionItem>
           <ActionItem
             onClick={() => {
               router.push("/settings");
             }}
           >
-            <CogSharpIcon />
-            <span style={{ textWrap: "nowrap" }}>{t("nav.settings")}</span>
+            <CogSharpIcon size={18} />
+            <span className="whitespace-nowrap">{t("nav.settings")}</span>
           </ActionItem>
         </ActionGroup>
         <ActionBarSpace />

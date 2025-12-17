@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Typography } from "@kindle-ui/core";
+import { Typography } from "@/components/ui";
 import { sortByDate } from "@/utils/sortPosts";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-const groupByYear = (posts) => {
+const groupByYear = (posts: any[]) => {
   return posts.reduce((acc, post) => {
     const year = new Date(post.frontmatter.date).getFullYear();
     if (!acc[year]) {
@@ -14,7 +14,7 @@ const groupByYear = (posts) => {
     }
     acc[year].push(post);
     return acc;
-  }, {});
+  }, {} as Record<string, any[]>);
 };
 
 interface AllPostsProps {
@@ -66,7 +66,7 @@ const AllPost: React.FC<AllPostsProps> = ({
           <div key={year}>
             <h2>{year}</h2>
             <ul>
-              {postsByYear[year].map((post) => (
+              {postsByYear[year].map((post: any) => (
                 <li key={post.id}>
                   <Link href={"/p/" + post.id}>
                     {post.frontmatter.title || post.slug}

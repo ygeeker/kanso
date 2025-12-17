@@ -11,7 +11,7 @@ import {
   GridItem,
   Section,
   SectionTitle,
-} from "@kindle-ui/core";
+} from "@/components/ui";
 import Tab from "@/components/Tab";
 import { useTranslations } from "next-intl";
 import type { IPost } from "@/types/index";
@@ -48,7 +48,8 @@ function PostList({
               allowWrap
             />
             <ListItemIcon
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 console.log("Clicked");
               }}
             >
@@ -134,4 +135,3 @@ const Home = (props: HomeProps) => {
 };
 
 export default Home;
-

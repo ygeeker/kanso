@@ -44,10 +44,13 @@
 	},
 	"devDependencies": {
 		"@svgr/webpack": "5.5.0",
+		"@tailwindcss/postcss": "^4.1.18",
 		"@types/node": "^13.13.52",
 		"@types/react": "^19.2.7",
 		"@types/styled-components": "^5.1.36",
+		"autoprefixer": "^10.4.23",
 		"feed": "^4.2.2",
+		"tailwindcss": "^4.1.18",
 		"typescript": "^5.9.3"
 	}
 }

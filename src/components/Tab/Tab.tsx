@@ -1,5 +1,5 @@
 import React from "react";
-import { Tab, TabItem } from "@kindle-ui/core";
+import { Tab, TabItem } from "@/components/ui";
 
 type TTab = {
 	name: string;
@@ -11,8 +11,8 @@ const HomeTab = ({
 	tabs,
 	activeIndex,
 }: {
-	onChange(index: keyof TTab): void;
-	activeIndex: Pick<TTab, "name">;
+	onChange(index: string): void;
+	activeIndex: string;
 	tabs: TTab[];
 }) => {
 	return (
