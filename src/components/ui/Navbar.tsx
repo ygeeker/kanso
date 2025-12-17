@@ -43,30 +43,32 @@ export const StatuBar: React.FC<StatusBarProps> = ({
 
   return (
     <div 
-      className="flex items-center justify-between px-3 py-1.5 border-b"
+      className="flex items-center justify-between px-3 py-2 md:py-1.5 border-b"
       style={{ 
         borderColor: 'var(--eink-divider)', 
         backgroundColor: 'var(--eink-paper)' 
       }}
     >
       <span 
-        className="text-xs font-sans truncate max-w-[120px]"
+        className="text-sm md:text-xs font-sans truncate max-w-[140px] md:max-w-[120px]"
         style={{ color: 'var(--eink-ink-secondary)' }}
       >
         {deviceName}
       </span>
-      <div className="flex items-center gap-2" style={{ color: 'var(--eink-ink-secondary)' }}>
+      <div className="flex items-center gap-3 md:gap-2" style={{ color: 'var(--eink-ink-secondary)' }}>
         {celluar?.on && (
-          <div className="flex items-center gap-1">
-            <span className="text-[10px] font-sans font-medium">{celluar.label}</span>
-            <CellularIcon size={14} signal={celluar.siginal} />
+          <div className="flex items-center gap-1.5 md:gap-1">
+            <span className="text-xs md:text-[10px] font-sans font-medium">{celluar.label}</span>
+            <CellularIcon size={18} className="md:hidden" signal={celluar.siginal} />
+            <CellularIcon size={14} className="hidden md:block" signal={celluar.siginal} />
           </div>
         )}
-        <div className="flex items-center gap-1">
-          <span className="text-[10px] font-sans">{battery}%</span>
-          <BatteryIcon size={14} level={battery} />
+        <div className="flex items-center gap-1.5 md:gap-1">
+          <span className="text-xs md:text-[10px] font-sans">{battery}%</span>
+          <BatteryIcon size={18} className="md:hidden" level={battery} />
+          <BatteryIcon size={14} className="hidden md:block" level={battery} />
         </div>
-        <span className="text-xs font-sans tabular-nums">{time}</span>
+        <span className="text-sm md:text-xs font-sans tabular-nums">{time}</span>
       </div>
     </div>
   );
