@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { globSync } from "glob";
+import matter from "gray-matter";
 
 const POSTS_DIR = path.join(process.cwd(), "posts");
 
@@ -13,39 +14,31 @@ export interface ICategory {
 }
 
 /**
- * Get all categories for a locale by reading category.config.js files
+ * Get all categories for a locale by reading tags from post frontmatter
  */
 function getCategories(locale: string): ICategory[] {
-	const pattern = `${POSTS_DIR}/${locale}/**/category.config.js`;
-	const configFiles = globSync(pattern, { nodir: true });
+	const pattern = `${POSTS_DIR}/${locale}/*.md`;
+	const files = globSync(pattern, { nodir: true });
 
-	const categories: ICategory[] = [];
+	const categorySet = new Map<string, ICategory>();
 
-	configFiles.forEach((filePath) => {
-		// Get the parent folder name as the category slug
-		const parentFolder = path.basename(path.dirname(filePath));
-
-		// Read and parse the config file
+	files.forEach((filePath) => {
 		const content = fs.readFileSync(filePath, "utf-8");
-		const configMatch = content.match(/module\.exports\s*=\s*({[\s\S]*?});?$/);
+		const { data: frontmatter } = matter(content);
 
-		let config: ICategory["config"] = {};
-		if (configMatch) {
-			try {
-				// Parse the object literal
-				config = eval(`(${configMatch[1]})`);
-			} catch (e) {
-				console.warn(`Failed to parse config at ${filePath}`);
-			}
+		const tag = frontmatter.tag;
+		if (tag && !categorySet.has(tag)) {
+			categorySet.set(tag, {
+				slug: tag,
+				config: {
+					name: tag,
+					description: "",
+				},
+			});
 		}
-
-		categories.push({
-			slug: config.slug || parentFolder,
-			config,
-		});
 	});
 
-	return categories;
+	return Array.from(categorySet.values());
 }
 
 export default getCategories;

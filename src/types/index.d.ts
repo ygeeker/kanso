@@ -4,12 +4,18 @@ export type IPost = {
 	frontmatter: {
 		title?: string;
 		date: string;
-		/** 目录 */
-		categories?: string[];
+		/** Tag/category of the post */
+		tag?: string;
+		/** Summary/description */
+		summary?: string;
+		/** Pin to top */
+		pin?: boolean;
 	};
-	id: number;
+	id: string;
 	markdownBody?: string;
+	/** Category derived from frontmatter.tag */
 	category?: string;
+	locale?: string;
 };
 
 declare global {
