@@ -17,7 +17,7 @@ export interface ICategory {
  * Get all categories for a locale by reading tags from post frontmatter
  */
 function getCategories(locale: string): ICategory[] {
-	const pattern = `${POSTS_DIR}/${locale}/*.md`;
+	const pattern = `${POSTS_DIR}/${locale}/*.mdx`;
 	const files = globSync(pattern, { nodir: true });
 
 	const categorySet = new Map<string, ICategory>();

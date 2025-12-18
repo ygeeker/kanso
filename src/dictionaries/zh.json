@@ -42,5 +42,12 @@
   },
   "common": {
     "all": "全部"
+  },
+  "categories": {
+    "Life": "生活",
+    "Tech": "技术",
+    "Coding": "编程",
+    "Art": "艺术",
+    "Ungroup": "未分类"
   }
 }

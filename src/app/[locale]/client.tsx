@@ -12,12 +12,36 @@ import {
   Section,
   SectionTitle,
 } from "@/components/ui";
-import Tab from "@/components/Tab";
 import { useTranslations } from "next-intl";
 import type { IPost } from "@/types/index";
 import Link from "next/link";
 
 const MAX_POST_COUNT = 25;
+
+function CategoryLabel({
+  text,
+  selected,
+  onClick,
+}: {
+  text: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`
+        px-3 py-1.5 text-sm rounded-full border transition-all duration-200
+        ${selected
+          ? "border-[var(--color-text-primary)] bg-[var(--color-text-primary)] text-[var(--color-background)]"
+          : "border-[var(--color-text-secondary)] text-[var(--color-text-secondary)] hover:border-[var(--color-text-primary)] hover:text-[var(--color-text-primary)]"
+        }
+      `}
+    >
+      {text}
+    </button>
+  );
+}
 
 function PostList({
   allPosts,
@@ -29,9 +53,9 @@ function PostList({
   falttedPosts: IPost[];
 }) {
   const classfiedPosts =
-    activeCategory !== "All"
-      ? falttedPosts.filter((post) => post.category === activeCategory)
-      : falttedPosts;
+    activeCategory === "All"
+      ? falttedPosts
+      : falttedPosts.filter((post) => post.category === activeCategory);
 
   return (
     <>
@@ -74,15 +98,20 @@ const Home = (props: HomeProps) => {
   const [activeCategory, setActiveCategory] = useState("All");
   const t = useTranslations();
   const tCommon = useTranslations("common");
+  const tCategories = useTranslations("categories");
 
-  const tabs = useMemo<{ name: string; text: string }[]>(
+  const categoryLabels = useMemo<{ name: string; text: string }[]>(
     () =>
       [{ name: "All", text: tCommon("all") }].concat(
         allCategories.map((item) => {
-          return { name: item.slug, text: item.config.name };
+          // Use translated name if available, fallback to slug
+          const translatedName = tCategories.has(item.slug)
+            ? tCategories(item.slug)
+            : item.slug;
+          return { name: item.slug, text: translatedName };
         })
       ),
-    [allCategories, tCommon]
+    [allCategories, tCategories, tCommon]
   );
 
   return (
@@ -106,14 +135,16 @@ const Home = (props: HomeProps) => {
         </Grid>
       </Section>
       <Section>
-        <Tab
-          lang={locale}
-          tabs={tabs}
-          activeIndex={activeCategory}
-          onChange={(index) => {
-            setActiveCategory(index);
-          }}
-        />
+        <div className="flex flex-wrap gap-2 mb-4">
+          {categoryLabels.map((category) => (
+            <CategoryLabel
+              key={category.name}
+              text={category.text}
+              selected={activeCategory === category.name}
+              onClick={() => setActiveCategory(category.name)}
+            />
+          ))}
+        </div>
 
         <PostList
           activeCategory={activeCategory}
