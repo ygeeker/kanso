@@ -67,17 +67,22 @@
   --eink-border: #c9c4b5;
   --eink-shadow: rgba(0, 0, 0, 0.08);
   
-  /* Kindle device bezel colors */
-  --bezel-outer: #2c2c2c;
-  --bezel-inner: #1f1f1f;
-  --bezel-accent: #404040;
-  --bezel-highlight: rgba(255, 255, 255, 0.05);
-  --bezel-shadow: rgba(0, 0, 0, 0.6);
+  /* Kindle Oasis bezel colors - Graphite metallic finish */
+  --bezel-body: #3a3a3a;
+  --bezel-body-light: #4a4a4a;
+  --bezel-body-dark: #2a2a2a;
+  --bezel-grip: #353535;
+  --bezel-grip-edge: #454545;
+  --bezel-button: #2f2f2f;
+  --bezel-button-edge: #404040;
+  --bezel-screen-border: #1a1a1a;
+  --bezel-highlight: rgba(255, 255, 255, 0.08);
+  --bezel-shadow: rgba(0, 0, 0, 0.5);
   
   /* Background behind device */
-  --device-bg: #d6d6d6;
-  --device-bg-gradient-start: #e0e0e0;
-  --device-bg-gradient-end: #c0c0c0;
+  --device-bg: #f0ede6;
+  --device-bg-gradient-start: #f5f2eb;
+  --device-bg-gradient-end: #e5e2db;
   
   /* Semantic colors */
   --color-background: var(--eink-paper);
@@ -110,11 +115,17 @@
   --eink-border: #4a4a44;
   --eink-shadow: rgba(0, 0, 0, 0.25);
   
-  --bezel-outer: #1a1a1a;
-  --bezel-inner: #0f0f0f;
-  --bezel-accent: #2a2a2a;
-  --bezel-highlight: rgba(255, 255, 255, 0.03);
-  --bezel-shadow: rgba(0, 0, 0, 0.8);
+  /* Kindle Oasis bezel colors - Dark mode */
+  --bezel-body: #2a2a2a;
+  --bezel-body-light: #3a3a3a;
+  --bezel-body-dark: #1a1a1a;
+  --bezel-grip: #252525;
+  --bezel-grip-edge: #353535;
+  --bezel-button: #202020;
+  --bezel-button-edge: #303030;
+  --bezel-screen-border: #0f0f0f;
+  --bezel-highlight: rgba(255, 255, 255, 0.04);
+  --bezel-shadow: rgba(0, 0, 0, 0.7);
   
   --device-bg: #1e1e1e;
   --device-bg-gradient-start: #252525;
@@ -178,6 +189,13 @@ html, body {
   font-family: var(--font-serif);
   color: var(--color-text-primary);
   background-color: var(--device-bg);
+}
+
+/* Disable overscroll bounce effect on larger screens */
+@media (min-width: 640px) {
+  html, body {
+    overscroll-behavior: none;
+  }
 }
 
 /* Links inherit E-ink ink color */
