@@ -1,17 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import ReactMarkdown from "react-markdown";
+import React, { useEffect, useRef, ReactNode } from "react";
 import styled from "styled-components";
-import CodeBlock from "@/components/CodeBlock";
 import ImageBlock from "@/components/ImageBlock";
-import HeadingBlock from "@/components/HeadingBlock";
-import FrameBlock from "@/components/FrameBlock";
 import { Typography } from "@/components/ui";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
-import remarkGfm from "remark-gfm";
 import Giscus from "@giscus/react";
 
 function formatDate(dateString: string, locale: string): string {
@@ -58,10 +51,15 @@ const StyledArticlePage = styled.div`
   }
 `;
 
-const ArticlePage = ({ id, postProps, postContent, locale }: {
+const ArticlePage = ({
+  id,
+  postProps,
+  postContent,
+  locale,
+}: {
   id: string;
   postProps: any;
-  postContent: string;
+  postContent: ReactNode;
   locale: string;
 }) => {
   const topRef = useRef<HTMLDivElement>(null);
@@ -69,13 +67,15 @@ const ArticlePage = ({ id, postProps, postContent, locale }: {
   // Reset scroll position when navigating to article
   useEffect(() => {
     // Find the scrollable parent container (KindleBezel content area)
-    const findScrollableParent = (element: HTMLElement | null): HTMLElement | null => {
+    const findScrollableParent = (
+      element: HTMLElement | null
+    ): HTMLElement | null => {
       if (!element) return null;
       const parent = element.parentElement;
       if (!parent) return null;
-      
+
       const style = window.getComputedStyle(parent);
-      if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+      if (style.overflowY === "auto" || style.overflowY === "scroll") {
         return parent;
       }
       return findScrollableParent(parent);
@@ -105,7 +105,6 @@ const ArticlePage = ({ id, postProps, postContent, locale }: {
           )}
         </Cover>
         <Typography itemScope itemType="http://schema.org/Article">
-
           <h1 itemProp="headline">{postProps.title}</h1>
           <div className="text-[var(--eink-ink-muted)] text-sm mb-4">
             <time itemProp="datePublished" dateTime={postProps.date}>
@@ -113,19 +112,7 @@ const ArticlePage = ({ id, postProps, postContent, locale }: {
             </time>
           </div>
 
-          <section itemProp="articleBody">
-            <ReactMarkdown
-              remarkPlugins={[remarkMath, remarkGfm]}
-              rehypePlugins={[rehypeKatex]}
-              components={{
-                code: CodeBlock,
-                heading: HeadingBlock,
-                img: ImageBlock,
-                iframe: FrameBlock,
-              }}
-              children={postContent}
-            ></ReactMarkdown>
-          </section>
+          <section itemProp="articleBody">{postContent}</section>
         </Typography>
       </StyledArticlePage>
       {/* {giscusConfig.enabled && (

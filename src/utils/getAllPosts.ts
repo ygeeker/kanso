@@ -13,12 +13,12 @@ interface IFileData {
 }
 
 /**
- * Get all MD files from posts directory (flat structure)
+ * Get all MDX files from posts directory (flat structure)
  */
 function getPostFiles(locale?: string): IFileData[] {
 	const pattern = locale
-		? `${POSTS_DIR}/${locale}/*.md`
-		: `${POSTS_DIR}/**/*.md`;
+		? `${POSTS_DIR}/${locale}/*.mdx`
+		: `${POSTS_DIR}/**/*.mdx`;
 
 	const files = globSync(pattern, { nodir: true });
 
@@ -60,7 +60,7 @@ export default function getAllPosts(options: GetAllPostsOption): IPost[] {
 	const files = getPostFiles(locale);
 
 	const posts: IPost[] = files.map((file) => {
-		const slug = path.basename(file.path, ".md").trim();
+		const slug = path.basename(file.path, ".mdx").trim();
 		const id = pocessRes.id ? pocessRes.id(slug) : slug;
 
 		const document = matter(file.content);
@@ -103,7 +103,7 @@ export default function getAllPosts(options: GetAllPostsOption): IPost[] {
  * Get a single post by slug and locale
  */
 export function getPostBySlug(slug: string, locale: string): { frontmatter: any; content: string } | null {
-	const filePath = path.join(POSTS_DIR, locale, `${slug}.md`);
+	const filePath = path.join(POSTS_DIR, locale, `${slug}.mdx`);
 
 	if (!fs.existsSync(filePath)) {
 		return null;
@@ -128,7 +128,7 @@ export function getAllPostSlugs(locale?: string): { slug: string; locale: string
 		const relativePath = path.relative(POSTS_DIR, file.path);
 		const parts = relativePath.split(path.sep);
 		const fileLocale = parts[0];
-		const slug = path.basename(file.path, ".md");
+		const slug = path.basename(file.path, ".mdx");
 
 		return {
 			slug,

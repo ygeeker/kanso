@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -31,7 +33,15 @@ const StyledFigure = styled.figure`
 	}
 `;
 
-const CodeBlock = ({ node, inline, children }) => {
+interface CodeBlockProps {
+	node?: any;
+	inline?: boolean;
+	className?: string;
+	children?: React.ReactNode;
+	[key: string]: any;
+}
+
+const CodeBlock = ({ node, inline, className, children, ...props }: CodeBlockProps) => {
 	useEffect(() => {
 		SyntaxHighlighter.registerLanguage("jsx", jsx);
 		SyntaxHighlighter.registerLanguage("javascript", javascript);
@@ -43,21 +53,42 @@ const CodeBlock = ({ node, inline, children }) => {
 		SyntaxHighlighter.registerLanguage("scss", scss);
 	}, []);
 
-	// Extracting the language
-	const className = node.properties?.className || [];
-	const match = className.find((className) =>
-		className.startsWith("language-")
-	);
-	const language = match ? match.replace("language-", "") : null;
-
-	if (inline) {
-		return <code>{children}</code>;
+	// Extracting the language - support both MDX and react-markdown formats
+	let language: string | null = null;
+	
+	// MDX format: className is passed directly as a prop
+	if (typeof className === "string" && className.startsWith("language-")) {
+		language = className.replace("language-", "");
+	} 
+	// React-markdown format: className is in node.properties
+	else if (node?.properties?.className) {
+		const nodeClassName = node.properties.className;
+		const match = Array.isArray(nodeClassName) 
+			? nodeClassName.find((cn: string) => cn.startsWith("language-"))
+			: typeof nodeClassName === "string" && nodeClassName.startsWith("language-") 
+				? nodeClassName 
+				: null;
+		language = match ? match.replace("language-", "") : null;
 	}
+
+	// Check if this is inline code
+	const isInline = inline || (!language && typeof children === "string" && !children.includes("\n"));
+
+	if (isInline) {
+		return <code className={className} {...props}>{children}</code>;
+	}
+
+	// Ensure children is a string for syntax highlighter
+	const codeString = typeof children === "string" 
+		? children 
+		: Array.isArray(children) 
+			? children.join("") 
+			: String(children || "");
 
 	return (
 		<StyledFigure>
-			<SyntaxHighlighter language={language} style={atomDark}>
-				{children}
+			<SyntaxHighlighter language={language || "text"} style={atomDark}>
+				{codeString.replace(/\n$/, "")}
 			</SyntaxHighlighter>
 		</StyledFigure>
 	);

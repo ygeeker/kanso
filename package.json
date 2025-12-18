@@ -27,6 +27,7 @@
 		"kindle-fonts": "latest",
 		"next": "^16.0.10",
 		"next-intl": "^4.6.1",
+		"next-mdx-remote": "^5.0.0",
 		"notion-client": "^6.16.0",
 		"postcss": "^8.5.6",
 		"react": "^19.2.3",

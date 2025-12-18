@@ -158,42 +158,47 @@ const KindleBezel: React.FC<KindleBezelProps> = ({ children, dark = false }) => 
                   height: 'min(680px, calc(100vh - 3rem))',
                   width: 'min(476px, calc((100vh - 3rem) * 0.7))',
                   minWidth: '320px',
+                  // Create isolated stacking context for the screen
+                  isolation: 'isolate',
                 }}
               >
-                {/* E-ink paper texture overlay */}
-                <div 
-                  className="absolute inset-0 pointer-events-none z-10 opacity-[0.02]"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-                  }}
-                />
-                
-                {/* Subtle screen vignette */}
-                <div 
-                  className="absolute inset-0 pointer-events-none z-10"
-                  style={{
-                    boxShadow: 'inset 0 0 30px rgba(0,0,0,0.02)',
-                  }}
-                />
-
                 {/* Dialog portal target */}
                 <div 
                   ref={desktopPortalRef}
                   className="absolute inset-0 z-50 pointer-events-none [&>*]:pointer-events-auto"
                 />
 
-                {/* Content area */}
+                {/* Content area - scrollable */}
                 <DialogPortalContext.Provider value={{ portalRef: desktopPortalRef }}>
                   <div 
-                    className="relative z-0 h-full overflow-y-auto overflow-x-hidden scrollbar-thin"
+                    className="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-thin"
                     style={{ 
                       backgroundColor: 'var(--eink-paper)',
-                      color: 'var(--eink-ink)'
+                      color: 'var(--eink-ink)',
+                      // GPU acceleration for smooth scrolling
+                      transform: 'translate3d(0, 0, 0)',
+                      backfaceVisibility: 'hidden',
+                      // Prevent scroll chaining to parent
+                      overscrollBehavior: 'contain',
+                      // Use touch momentum scrolling on iOS
+                      WebkitOverflowScrolling: 'touch',
                     }}
                   >
                     {children}
                   </div>
                 </DialogPortalContext.Provider>
+
+                {/* Static overlays - BELOW scroll content in DOM but visually above via z-index */}
+                {/* These won't repaint during scroll because they're in a separate layer */}
+                <div 
+                  className="absolute inset-0 pointer-events-none z-10"
+                  style={{
+                    // Subtle vignette effect
+                    boxShadow: 'inset 0 0 30px rgba(0,0,0,0.02)',
+                    // Force GPU layer so it doesn't affect scroll performance
+                    transform: 'translate3d(0, 0, 0)',
+                  }}
+                />
               </div>
             </div>
           </div>
