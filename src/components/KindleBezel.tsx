@@ -152,11 +152,12 @@ const KindleBezel: React.FC<KindleBezelProps> = ({ children, dark = false }) => 
               />
 
               {/* Screen container - NO border radius */}
+              {/* Real Kindle dimensions: 159mm × 141mm = aspect ratio ~1.128:1 */}
               <div 
                 className="relative overflow-hidden"
                 style={{
-                  height: 'min(680px, calc(100vh - 3rem))',
-                  width: 'min(476px, calc((100vh - 3rem) * 0.7))',
+                  height: 'min(720px, calc(100vh - 3rem))',
+                  width: 'min(576px, calc((100vh - 3rem) * 0.8))',
                   minWidth: '320px',
                   // Create isolated stacking context for the screen
                   isolation: 'isolate',
@@ -199,6 +200,7 @@ const KindleBezel: React.FC<KindleBezelProps> = ({ children, dark = false }) => 
                     transform: 'translate3d(0, 0, 0)',
                   }}
                 />
+
               </div>
             </div>
           </div>
@@ -207,7 +209,7 @@ const KindleBezel: React.FC<KindleBezelProps> = ({ children, dark = false }) => 
           <div 
             className="hidden lg:flex relative shrink-0"
             style={{
-              width: '56px',
+              width: '80px',
               background: `linear-gradient(180deg, 
                 var(--bezel-body-light) 0%,
                 var(--bezel-grip) 15%, 

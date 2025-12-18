@@ -50,6 +50,23 @@ const Layout = (props: {
   return (
     <ColorSchemeProvider value={{ colorScheme, setColorScheme }}>
       <DeviceSettingsProvider>
+        {/* Device label at bottom-left of viewport */}
+        <div 
+          className="hidden md:block fixed bottom-4 left-4 pointer-events-none z-50"
+          style={{
+            fontSize: '10px',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            color: 'rgba(80, 80, 80, 0.5)',
+            lineHeight: '1.5',
+          }}
+        >
+          <span>Kindle Oasis.</span>
+          <br />
+          <span>My actual device is KPW5</span>
+          <br />
+          <span>© 2021 Rene Wang</span>
+        </div>
+
         <KindleBezel dark={colorScheme === "dark"}>
           <div ref={containerEle}>
             <Header
