@@ -102,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({ menuItems = [] }) => {
                 href: "https://x.com/renewang",
               },
               {
-                textPrimary: t("nav.about"),
+                textPrimary: t("nav.about.title"),
                 onClick: handleClick,
               },
             ]}
