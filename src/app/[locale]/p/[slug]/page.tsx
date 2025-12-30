@@ -64,6 +64,12 @@ export async function generateMetadata({
       authors: [AUTHOR_NAME],
       locale: locale,
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      creator: "@" + AUTHOR_NAME,
+    },
   };
 }
 
