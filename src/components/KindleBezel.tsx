@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { DialogPortalContext } from "@/contexts/dialogPortal";
 
 interface KindleBezelProps {
@@ -26,6 +27,15 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
 }) => {
   const desktopPortalRef = useRef<HTMLDivElement>(null);
   const mobilePortalRef = useRef<HTMLDivElement>(null);
+  const scrollableContentRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Reset scroll position to 0 when route changes
+  useEffect(() => {
+    if (scrollableContentRef.current) {
+      scrollableContentRef.current.scrollTop = 0;
+    }
+  }, [pathname]);
 
   return (
     <div className={dark ? "dark" : ""} data-theme={dark ? "dark" : "light"}>
@@ -192,6 +202,7 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
                   value={{ portalRef: desktopPortalRef }}
                 >
                   <div
+                    ref={scrollableContentRef}
                     className="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-thin"
                     style={{
                       backgroundColor: "var(--eink-paper)",
@@ -200,10 +211,10 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
                       transform: "translate3d(0, 0, 0)",
                       backfaceVisibility: "hidden",
                       willChange: "scroll-position",
-                      // Prevent scroll chaining to parent
-                      overscrollBehavior: "contain",
-                      // Use touch momentum scrolling on iOS
-                      WebkitOverflowScrolling: "touch",
+                      // Disable overscroll bounce effect
+                      overscrollBehavior: "none",
+                      // Disable iOS momentum scrolling to prevent bounce
+                      WebkitOverflowScrolling: "auto",
                       // CSS containment - isolate this scroll container from the rest of the page
                       // This prevents layout/paint recalculation of parent elements during scroll
                       contain: "layout paint style",
