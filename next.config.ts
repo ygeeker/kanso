@@ -20,6 +20,19 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-src https://giscus.app;",
+          },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       // Locale migration redirects

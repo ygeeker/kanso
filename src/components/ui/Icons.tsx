@@ -143,10 +143,10 @@ export const MenuIcon: React.FC<IconProps> = ({ className = "", size = 20 }) => 
   </svg>
 );
 
-export const BatteryIcon: React.FC<IconProps & { level?: number }> = ({ 
-  className = "", 
+export const BatteryIcon: React.FC<IconProps & { level?: number }> = ({
+  className = "",
   size = 20,
-  level = 100 
+  level = 100
 }) => (
   <svg
     className={className}
@@ -157,15 +157,15 @@ export const BatteryIcon: React.FC<IconProps & { level?: number }> = ({
     stroke="currentColor"
     strokeWidth="2"
   >
-    <rect x="1" y="4" width="30" height="16" rx="2" />
+    <rect x="1" y="4" width="30" height="16" rx="0" />
     <rect x="33" y="8" width="2" height="8" fill="currentColor" stroke="none" />
-    <rect 
-      x="3" 
-      y="6" 
-      width={Math.max(0, (level / 100) * 26)} 
-      height="12" 
-      fill="currentColor" 
-      stroke="none" 
+    <rect
+      x="4"
+      y="7"
+      width={Math.max(0, (level / 100) * 24)}
+      height="10"
+      fill="currentColor"
+      stroke="none"
     />
   </svg>
 );
@@ -193,10 +193,10 @@ export const WifiIcon: React.FC<IconProps & { strength?: number }> = ({
   </svg>
 );
 
-export const CellularIcon: React.FC<IconProps & { signal?: number }> = ({ 
-  className = "", 
+export const CellularIcon: React.FC<IconProps & { signal?: number }> = ({
+  className = "",
   size = 20,
-  signal = 4 
+  signal = 4
 }) => (
   <svg
     className={className}
@@ -209,6 +209,24 @@ export const CellularIcon: React.FC<IconProps & { signal?: number }> = ({
     <rect x="8" y="12" width="4" height="10" opacity={signal >= 2 ? 1 : 0.3} />
     <rect x="14" y="8" width="4" height="14" opacity={signal >= 3 ? 1 : 0.3} />
     <rect x="20" y="4" width="4" height="18" opacity={signal >= 4 ? 1 : 0.3} />
+  </svg>
+);
+
+export const ShoppingCartIcon: React.FC<IconProps> = ({ className = "", size = 20 }) => (
+  <svg
+    className={className}
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="9" cy="21" r="1" />
+    <circle cx="20" cy="21" r="1" />
+    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
   </svg>
 );
 

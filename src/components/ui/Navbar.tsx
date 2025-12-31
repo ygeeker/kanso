@@ -8,6 +8,7 @@ import {
   MenuIcon,
   CloseIcon,
   EllipsisVerticalIcon,
+  ShoppingCartIcon,
 } from "./Icons";
 import { useDeviceSettings } from "@/contexts/deviceSettings";
 
@@ -21,11 +22,11 @@ import { useDeviceSettings } from "@/contexts/deviceSettings";
 // ============================================
 
 // Airplane mode icon (outline/filled)
-const AirplaneModeIcon: React.FC<{ size?: number; className?: string; filled?: boolean }> = ({
-  size = 20,
-  className = "",
-  filled = false,
-}) => (
+const AirplaneModeIcon: React.FC<{
+  size?: number;
+  className?: string;
+  filled?: boolean;
+}> = ({ size = 20, className = "", filled = false }) => (
   <svg
     className={className}
     width={size}
@@ -46,11 +47,11 @@ const AirplaneModeIcon: React.FC<{ size?: number; className?: string; filled?: b
 );
 
 // Bluetooth icon (outline/filled)
-const BluetoothIcon: React.FC<{ size?: number; className?: string; filled?: boolean }> = ({
-  size = 20,
-  className = "",
-  filled = false,
-}) => (
+const BluetoothIcon: React.FC<{
+  size?: number;
+  className?: string;
+  filled?: boolean;
+}> = ({ size = 20, className = "", filled = false }) => (
   <svg
     className={className}
     width={size}
@@ -76,11 +77,11 @@ const BluetoothIcon: React.FC<{ size?: number; className?: string; filled?: bool
 );
 
 // Sync icon (outline/filled)
-const SyncIcon: React.FC<{ size?: number; className?: string; filled?: boolean }> = ({
-  size = 20,
-  className = "",
-  filled = false,
-}) => (
+const SyncIcon: React.FC<{
+  size?: number;
+  className?: string;
+  filled?: boolean;
+}> = ({ size = 20, className = "", filled = false }) => (
   <svg
     className={className}
     width={size}
@@ -104,11 +105,11 @@ const SyncIcon: React.FC<{ size?: number; className?: string; filled?: boolean }
 );
 
 // Settings icon (outline/filled)
-const SettingsIcon: React.FC<{ size?: number; className?: string; filled?: boolean }> = ({
-  size = 20,
-  className = "",
-  filled = false,
-}) => (
+const SettingsIcon: React.FC<{
+  size?: number;
+  className?: string;
+  filled?: boolean;
+}> = ({ size = 20, className = "", filled = false }) => (
   <svg
     className={className}
     width={size}
@@ -132,11 +133,11 @@ const SettingsIcon: React.FC<{ size?: number; className?: string; filled?: boole
 );
 
 // Dark mode icon (outline/filled)
-const DarkModeIcon: React.FC<{ size?: number; className?: string; filled?: boolean }> = ({
-  size = 20,
-  className = "",
-  filled = false,
-}) => (
+const DarkModeIcon: React.FC<{
+  size?: number;
+  className?: string;
+  filled?: boolean;
+}> = ({ size = 20, className = "", filled = false }) => (
   <svg
     className={className}
     width={size}
@@ -156,7 +157,7 @@ const DarkModeIcon: React.FC<{ size?: number; className?: string; filled?: boole
   </svg>
 );
 
-// Chevron down icon
+// Chevron down icon with wide ~120 degree angle (Kindle-style)
 const ChevronDownIcon: React.FC<{ size?: number; className?: string }> = ({
   size = 20,
   className = "",
@@ -172,7 +173,7 @@ const ChevronDownIcon: React.FC<{ size?: number; className?: string }> = ({
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <polyline points="6 9 12 15 18 9" />
+    <polyline points="4 9 12 14 20 9" />
   </svg>
 );
 
@@ -222,12 +223,8 @@ const ControlCenter: React.FC<ControlCenterProps> = ({
   deviceName,
   battery,
 }) => {
-  const {
-    wireless,
-    setAirplaneMode,
-    setWifiEnabled,
-    setBluetoothEnabled,
-  } = useDeviceSettings();
+  const { wireless, setAirplaneMode, setWifiEnabled, setBluetoothEnabled } =
+    useDeviceSettings();
   const [dateTime, setDateTime] = useState("");
 
   useEffect(() => {
@@ -271,155 +268,163 @@ const ControlCenter: React.FC<ControlCenterProps> = ({
           boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
         }}
       >
-      {/* Header with device name and date */}
-      <div
-        className="px-4 pt-3 pb-2 border-b"
-        style={{ borderColor: "var(--eink-divider)" }}
-      >
-        <div className="flex items-center justify-between">
-          <div>
-            <div
-              className="text-base font-sans font-medium"
-              style={{ color: "var(--eink-ink)" }}
-            >
-              {deviceName}
-            </div>
-            <div
-              className="text-sm font-sans mt-0.5"
-              style={{ color: "var(--eink-ink-secondary)" }}
-            >
-              {dateTime}
-            </div>
-          </div>
-          <div
-            className="flex items-center gap-1.5"
-            style={{ color: "var(--eink-ink-secondary)" }}
-          >
-            <span className="text-sm font-sans">{battery}%</span>
-            <BatteryIcon size={20} level={battery} />
-          </div>
-        </div>
-      </div>
-
-      {/* Control buttons grid */}
-      <div className="p-4">
-        <div className="flex justify-center gap-3 flex-wrap">
-          {/* Airplane Mode */}
-          <div className="flex flex-col items-center gap-1">
-            <ControlButton
-              icon={<AirplaneModeIcon size={22} filled={wireless.airplaneMode} />}
-              label="Airplane"
-              active={wireless.airplaneMode}
-              onClick={() => setAirplaneMode(!wireless.airplaneMode)}
-            />
-            <span
-              className="text-[10px] font-sans"
-              style={{ color: "var(--eink-ink-secondary)" }}
-            >
-              {wireless.airplaneMode ? "On" : "Off"}
-            </span>
-          </div>
-
-          {/* Bluetooth */}
-          <div className="flex flex-col items-center gap-1">
-            <ControlButton
-              icon={<BluetoothIcon size={22} filled={wireless.bluetoothEnabled} />}
-              label="Bluetooth"
-              active={wireless.bluetoothEnabled}
-              onClick={() => setBluetoothEnabled(!wireless.bluetoothEnabled)}
-            />
-            <span
-              className="text-[10px] font-sans"
-              style={{ color: "var(--eink-ink-secondary)" }}
-            >
-              {wireless.bluetoothEnabled ? "On" : "Off"}
-            </span>
-          </div>
-
-          {/* Dark Mode */}
-          <div className="flex flex-col items-center gap-1">
-            <ControlButton
-              icon={<DarkModeIcon size={22} filled={false} />}
-              label="Dark Mode"
-              active={false}
-            />
-            <span
-              className="text-[10px] font-sans"
-              style={{ color: "var(--eink-ink-secondary)" }}
-            >
-              Dark Mode
-            </span>
-          </div>
-        </div>
-
-        <div className="flex justify-center gap-3 flex-wrap mt-3">
-          {/* Sync */}
-          <div className="flex flex-col items-center gap-1">
-            <ControlButton
-              icon={<SyncIcon size={22} filled={false} />}
-              label="Sync"
-              active={false}
-            />
-            <span
-              className="text-[10px] font-sans"
-              style={{ color: "var(--eink-ink-secondary)" }}
-            >
-              Sync
-            </span>
-          </div>
-
-          {/* All Settings */}
-          <div className="flex flex-col items-center gap-1">
-            <ControlButton
-              icon={<SettingsIcon size={22} filled={false} />}
-              label="All Settings"
-              active={false}
-            />
-            <span
-              className="text-[10px] font-sans"
-              style={{ color: "var(--eink-ink-secondary)" }}
-            >
-              All Settings
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Brightness slider */}
-      <div className="px-4 pb-3">
+        {/* Header with device name and date */}
         <div
-          className="text-sm font-sans mb-2"
-          style={{ color: "var(--eink-ink)" }}
+          className="px-4 pt-3 pb-2 border-b"
+          style={{ borderColor: "var(--eink-divider)" }}
         >
-          Brightness
-        </div>
-        <div className="flex items-center gap-2">
-          <span style={{ color: "var(--eink-ink-muted)" }}>−</span>
-          <div className="flex-1 relative">
-            <input
-              type="range"
-              min="0"
-              max="24"
-              defaultValue="10"
-              className="w-full h-1 rounded-full appearance-none cursor-pointer"
-              style={{
-                backgroundColor: "var(--eink-border)",
-                accentColor: "var(--eink-ink)",
-              }}
-            />
+          <div className="flex items-center justify-between">
+            <div>
+              <div
+                className="text-base font-sans font-medium"
+                style={{ color: "var(--eink-ink)" }}
+              >
+                {deviceName}
+              </div>
+              <div
+                className="text-sm font-sans mt-0.5"
+                style={{ color: "var(--eink-ink-secondary)" }}
+              >
+                {dateTime}
+              </div>
+            </div>
+            <div
+              className="flex items-center gap-1.5"
+              style={{ color: "var(--eink-ink-secondary)" }}
+            >
+              <span className="text-sm font-sans">{battery}%</span>
+              <BatteryIcon size={20} level={battery} />
+            </div>
           </div>
-          <span style={{ color: "var(--eink-ink-muted)" }}>+</span>
+        </div>
+
+        {/* Control buttons grid */}
+        <div className="p-4">
+          <div className="flex justify-center gap-3 flex-wrap">
+            {/* Airplane Mode */}
+            <div className="flex flex-col items-center gap-1">
+              <ControlButton
+                icon={
+                  <AirplaneModeIcon size={22} filled={wireless.airplaneMode} />
+                }
+                label="Airplane"
+                active={wireless.airplaneMode}
+                onClick={() => setAirplaneMode(!wireless.airplaneMode)}
+              />
+              <span
+                className="text-[10px] font-sans"
+                style={{ color: "var(--eink-ink-secondary)" }}
+              >
+                {wireless.airplaneMode ? "On" : "Off"}
+              </span>
+            </div>
+
+            {/* Bluetooth */}
+            <div className="flex flex-col items-center gap-1">
+              <ControlButton
+                icon={
+                  <BluetoothIcon size={22} filled={wireless.bluetoothEnabled} />
+                }
+                label="Bluetooth"
+                active={wireless.bluetoothEnabled}
+                onClick={() => setBluetoothEnabled(!wireless.bluetoothEnabled)}
+              />
+              <span
+                className="text-[10px] font-sans"
+                style={{ color: "var(--eink-ink-secondary)" }}
+              >
+                {wireless.bluetoothEnabled ? "On" : "Off"}
+              </span>
+            </div>
+
+            {/* Dark Mode */}
+            <div className="flex flex-col items-center gap-1">
+              <ControlButton
+                icon={<DarkModeIcon size={22} filled={false} />}
+                label="Dark Mode"
+                active={false}
+              />
+              <span
+                className="text-[10px] font-sans"
+                style={{ color: "var(--eink-ink-secondary)" }}
+              >
+                Dark Mode
+              </span>
+            </div>
+          </div>
+
+          <div className="flex justify-center gap-3 flex-wrap mt-3">
+            {/* Sync */}
+            <div className="flex flex-col items-center gap-1">
+              <ControlButton
+                icon={<SyncIcon size={22} filled={false} />}
+                label="Sync"
+                active={false}
+              />
+              <span
+                className="text-[10px] font-sans"
+                style={{ color: "var(--eink-ink-secondary)" }}
+              >
+                Sync
+              </span>
+            </div>
+
+            {/* All Settings */}
+            <div className="flex flex-col items-center gap-1">
+              <ControlButton
+                icon={<SettingsIcon size={22} filled={false} />}
+                label="All Settings"
+                active={false}
+              />
+              <span
+                className="text-[10px] font-sans"
+                style={{ color: "var(--eink-ink-secondary)" }}
+              >
+                All Settings
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Brightness slider */}
+        <div className="px-4 pb-3">
+          <div
+            className="text-sm font-sans mb-2"
+            style={{ color: "var(--eink-ink)" }}
+          >
+            Brightness
+          </div>
+          <div className="flex items-center gap-2">
+            <span style={{ color: "var(--eink-ink-muted)" }}>−</span>
+            <div className="flex-1 relative">
+              <input
+                type="range"
+                min="0"
+                max="24"
+                defaultValue="10"
+                className="w-full h-1 rounded-full appearance-none cursor-pointer"
+                style={{
+                  backgroundColor: "var(--eink-border)",
+                  accentColor: "var(--eink-ink)",
+                }}
+              />
+            </div>
+            <span style={{ color: "var(--eink-ink-muted)" }}>+</span>
+          </div>
+        </div>
+
+        {/* Close handle */}
+        <div
+          className="flex justify-center py-2 cursor-pointer"
+          onClick={onClose}
+        >
+          <ChevronDownIcon
+            size={20}
+            className="rotate-180"
+            style={{ color: "var(--eink-ink-muted)" }}
+          />
         </div>
       </div>
-
-      {/* Close handle */}
-      <div
-        className="flex justify-center py-2 cursor-pointer"
-        onClick={onClose}
-      >
-        <ChevronDownIcon size={20} className="rotate-180" style={{ color: "var(--eink-ink-muted)" }} />
-      </div>
-    </div>
     </>
   );
 };
@@ -445,7 +450,11 @@ export const StatuBar: React.FC<StatusBarProps> = ({
     const updateTime = () => {
       const now = new Date();
       setTime(
-        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+        now.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        })
       );
     };
     updateTime();
@@ -456,7 +465,7 @@ export const StatuBar: React.FC<StatusBarProps> = ({
   return (
     <>
       <div
-        className="flex items-center justify-between px-3 py-2 md:py-1.5 border-b cursor-pointer select-none"
+        className="flex items-center justify-between px-4 py-2 md:py-1.5 border-b cursor-pointer select-none"
         style={{
           borderColor: "var(--eink-divider)",
           backgroundColor: "var(--eink-paper)",
@@ -465,54 +474,74 @@ export const StatuBar: React.FC<StatusBarProps> = ({
       >
         {/* Time on the left */}
         <span
-          className="text-sm md:text-xs font-sans tabular-nums"
-          style={{ color: "var(--eink-ink-secondary)" }}
+          className="text-base md:text-sm font-sans tabular-nums flex-1"
+          style={{ color: "var(--eink-ink)" }}
         >
           {time}
         </span>
 
+        {/* Center chevron indicator */}
+        <div className="flex-1 flex justify-center">
+          <ChevronDownIcon
+            size={20}
+            className="md:hidden"
+            style={{ color: "var(--eink-ink)" }}
+          />
+          <ChevronDownIcon
+            size={16}
+            className="hidden md:block"
+            style={{ color: "var(--eink-ink)" }}
+          />
+        </div>
+
         {/* Status icons on the right */}
         <div
-          className="flex items-center gap-3 md:gap-2"
-          style={{ color: "var(--eink-ink-secondary)" }}
+          className="flex items-center gap-3 md:gap-2 flex-1 justify-end"
+          style={{ color: "var(--eink-ink)" }}
         >
           {/* Airplane Mode indicator */}
           {wireless.airplaneMode && (
-            <AirplaneModeIcon size={18} className="md:hidden" />
+            <AirplaneModeIcon size={20} className="md:hidden" filled />
           )}
           {wireless.airplaneMode && (
-            <AirplaneModeIcon size={14} className="hidden md:block" />
+            <AirplaneModeIcon size={16} className="hidden md:block" filled />
           )}
 
-          {/* WiFi indicator */}
+          {/* WiFi indicator - only show when not in airplane mode */}
           {wireless.wifiEnabled && !wireless.airplaneMode && (
             <div className="flex items-center gap-1.5 md:gap-1">
               <WifiIcon
-                size={18}
+                size={20}
                 className="md:hidden"
                 strength={wireless.wifiSignal}
               />
               <WifiIcon
-                size={14}
+                size={16}
                 className="hidden md:block"
                 strength={wireless.wifiSignal}
               />
             </div>
           )}
 
-          {/* Bluetooth indicator */}
+          {/* Bluetooth indicator - only show when not in airplane mode */}
           {wireless.bluetoothEnabled && !wireless.airplaneMode && (
             <>
-              <BluetoothIcon size={18} className="md:hidden" />
-              <BluetoothIcon size={14} className="hidden md:block" />
+              <BluetoothIcon size={20} className="md:hidden" filled />
+              <BluetoothIcon size={16} className="hidden md:block" filled />
             </>
           )}
 
           {/* Battery indicator */}
           <div className="flex items-center gap-1.5 md:gap-1">
-            <span className="text-xs md:text-[10px] font-sans">{battery}%</span>
-            <BatteryIcon size={18} className="md:hidden" level={battery} />
-            <BatteryIcon size={14} className="hidden md:block" level={battery} />
+            <span className="text-sm md:text-xs font-sans tabular-nums">
+              {battery}%
+            </span>
+            <BatteryIcon size={22} className="md:hidden" level={battery} />
+            <BatteryIcon
+              size={18}
+              className="hidden md:block"
+              level={battery}
+            />
           </div>
         </div>
       </div>
@@ -616,7 +645,7 @@ export const ActionItem: React.FC<ActionItemProps> = ({
 };
 
 // ============================================
-// Search Bar
+// Search Bar (Kindle-style)
 // ============================================
 
 interface SearchBarProps {
@@ -625,11 +654,10 @@ interface SearchBarProps {
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder = "Search",
+  placeholder = "Search Kindle",
   onSearch,
 }) => {
   const [query, setQuery] = useState("");
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -637,53 +665,31 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="relative flex items-center">
-      {isExpanded ? (
-        <form onSubmit={handleSubmit} className="flex items-center">
-          <div className="relative">
-            <SearchIcon
-              size={16}
-              className="absolute left-2 top-1/2 -translate-y-1/2 text-[var(--eink-ink-muted)]"
-            />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={placeholder}
-              className="
-                pl-8 pr-3 py-1.5
-                w-40
-                text-sm font-sans
-                bg-[var(--eink-paper-warm)]
-                border border-[var(--eink-border)]
-                rounded
-                focus:outline-none focus:border-[var(--eink-ink-muted)]
-                text-[var(--eink-ink)]
-                placeholder:text-[var(--eink-ink-muted)]
-              "
-              autoFocus
-              onBlur={() => !query && setIsExpanded(false)}
-            />
-          </div>
-        </form>
-      ) : (
-        <button
-          onClick={() => setIsExpanded(true)}
+    <form onSubmit={handleSubmit} className="flex-1 mx-2">
+      <div className="relative">
+        <SearchIcon
+          size={16}
+          className="absolute left-3 top-1/2 -translate-y-1/2 hidden md:block"
+        />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={placeholder}
           className="
-            flex items-center gap-1.5
-            px-2 py-1.5
-            text-[var(--eink-ink-secondary)]
-            hover:text-[var(--eink-ink)]
-            hover:bg-[var(--eink-paper-warm)]
-            rounded
+            w-full pl-10 md:pl-9 pr-4 py-2 md:py-1.5 text-base md:text-sm font-sans
+            border-2 md:border
+            rounded-full
+            focus:outline-none
             transition-colors duration-150
+            placeholder-(--eink-ink)
+            bg-(--eink-paper)
+            border-(--eink-ink)
+            text-(--eink-ink)
           "
-        >
-          <SearchIcon size={16} />
-          <span className="text-sm font-sans">{placeholder}</span>
-        </button>
-      )}
-    </div>
+        />
+      </div>
+    </form>
   );
 };
 
