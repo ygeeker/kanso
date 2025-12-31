@@ -8,6 +8,7 @@ import {
 } from "next-intl/server";
 import { routing } from "../../i18n/routing";
 import { notFound } from "next/navigation";
+import { Analytics } from '@vercel/analytics/next';
 
 import "./global.css";
 
@@ -84,6 +85,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
         <NextIntlClientProvider messages={messages}>
           <Layout locale={locale}>{children}</Layout>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
