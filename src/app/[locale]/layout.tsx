@@ -1,4 +1,3 @@
-import Layout from "@/components/Layout";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import {
@@ -9,8 +8,10 @@ import {
 import { routing } from "../../i18n/routing";
 import { notFound } from "next/navigation";
 import { Analytics } from '@vercel/analytics/next';
+import { Provider as JotaiProvider } from 'jotai';
 
 import "./global.css";
+import SystemLayout from "src/system/components/SystemLayout";
 
 type Locale = (typeof routing.locales)[number];
 
@@ -82,9 +83,11 @@ export default async function RootLayout({ children, params }: LayoutProps) {
   return (
     <html lang={locale}>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          <Layout locale={locale}>{children}</Layout>
-        </NextIntlClientProvider>
+        <JotaiProvider>
+          <NextIntlClientProvider messages={messages}>
+            <SystemLayout locale={locale}>{children}</SystemLayout>
+          </NextIntlClientProvider>
+        </JotaiProvider>
         <Analytics />
       </body>
     </html>

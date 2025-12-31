@@ -1,15 +1,12 @@
 "use client";
 
 import Giscus from "@giscus/react";
-import { useReaderSettings } from "@/contexts/readerSettings";
 
 interface GiscusCommentsProps {
   locale: string;
 }
 
 export default function GiscusComments({ locale }: GiscusCommentsProps) {
-  const { settings } = useReaderSettings();
-
   // Determine theme based on reader settings if available
   const theme = "light"; // You can make this dynamic based on your color scheme context
 

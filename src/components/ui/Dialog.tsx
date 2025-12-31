@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { CloseIcon } from "./Icons";
-import { DialogPortal } from "@/contexts/dialogPortal";
+import { DialogPortal } from "@/system/contexts/dialogPortal";
 
 /**
  * Kindle-style Dialog Components

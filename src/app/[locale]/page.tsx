@@ -1,7 +1,7 @@
 import getAllPosts from "@/utils/getAllPosts";
 import getCategories from "@/utils/getCategories";
 import { setRequestLocale } from "next-intl/server";
-import HomeClient from "./client";
+import LauncherApp from "@/apps/launcher";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -27,7 +27,7 @@ export default async function HomePage({ params }: PageProps) {
   const allCategories = getCategories(locale);
 
   return (
-    <HomeClient
+    <LauncherApp
       allPosts={allPosts}
       falttedPosts={allPosts}
       allCategories={allCategories}

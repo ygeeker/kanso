@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
-import BrowserClient from "./client";
+import BrowserApp from "@/apps/browser";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -14,7 +14,7 @@ export default async function BrowserPage({ params }: PageProps) {
 
   return (
     <Suspense fallback={<BrowserLoading />}>
-      <BrowserClient locale={locale} />
+      <BrowserApp locale={locale} />
     </Suspense>
   );
 }

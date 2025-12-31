@@ -26,6 +26,12 @@
       "@/pages/*": [
         "src/pages/*"
       ],
+      "@/apps/*": [
+        "src/apps/*"
+      ],
+      "@/system/*": [
+        "src/system/*"
+      ],
       "@/utils/*": [
         "src/utils/*"
       ],

@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useAtom } from "jotai";
+import { activeCategoryAtom } from "./atoms";
 import {
   Button,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  EllipsisVerticalIcon,
   Grid,
   GridItem,
   Section,
@@ -15,89 +13,20 @@ import {
 import { useTranslations } from "next-intl";
 import type { IPost } from "@/types/index";
 import Link from "next/link";
+import CategoryLabel from "./components/CategoryLabel";
+import PostList from "./components/PostList";
+import AppToolbar from "@/system/components/AppToolbar";
 
-const MAX_POST_COUNT = 25;
-
-function CategoryLabel({
-  text,
-  selected,
-  onClick,
-}: {
-  text: string;
-  selected: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`
-        px-3 py-1.5 text-sm rounded-full border transition-all duration-200
-        ${selected
-          ? "border-[var(--color-text-primary)] bg-[var(--color-text-primary)] text-[var(--color-background)]"
-          : "border-[var(--color-text-secondary)] text-[var(--color-text-secondary)] hover:border-[var(--color-text-primary)] hover:text-[var(--color-text-primary)]"
-        }
-      `}
-    >
-      {text}
-    </button>
-  );
-}
-
-function PostList({
-  allPosts,
-  falttedPosts,
-  activeCategory,
-  locale,
-}: {
-  activeCategory: string;
-  allPosts: any;
-  falttedPosts: IPost[];
-  locale: string;
-}) {
-  const classfiedPosts =
-    activeCategory === "All"
-      ? falttedPosts
-      : falttedPosts.filter((post) => post.category === activeCategory);
-
-  return (
-    <>
-      {classfiedPosts.slice(0, MAX_POST_COUNT).map((post) => (
-        <Link locale={locale} key={post.id} href={"/p/" + post.id} style={{ textDecoration: "none" }}>
-          <ListItem
-            style={{
-              cursor: "pointer",
-            }}
-          >
-            <ListItemText
-              primary={post.frontmatter ? post.frontmatter.title : post.slug}
-              second={post.frontmatter ? post.frontmatter.createAt : "1970/01/01"}
-              allowWrap
-            />
-            <ListItemIcon
-              onClick={(e) => {
-                e.preventDefault();
-                console.log("Clicked");
-              }}
-            >
-              <EllipsisVerticalIcon />
-            </ListItemIcon>
-          </ListItem>
-        </Link>
-      ))}
-    </>
-  );
-}
-
-interface HomeProps {
+interface LauncherAppProps {
   allPosts: any;
   falttedPosts: IPost[];
   locale: string;
   allCategories: { slug: string; config: { name: string } }[];
 }
 
-const Home = (props: HomeProps) => {
+export default function LauncherApp(props: LauncherAppProps) {
   const { allPosts, falttedPosts, locale, allCategories } = props;
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useAtom(activeCategoryAtom);
   const t = useTranslations();
   const tCommon = useTranslations("common");
   const tCategories = useTranslations("categories");
@@ -118,6 +47,7 @@ const Home = (props: HomeProps) => {
 
   return (
     <>
+      <AppToolbar type="none" />
       <Section>
         <SectionTitle label={t("homePage.features")} showArrow />
 
@@ -166,6 +96,4 @@ const Home = (props: HomeProps) => {
       </Section>
     </>
   );
-};
-
-export default Home;
+}

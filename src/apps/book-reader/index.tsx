@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, ReactNode, useMemo } from "react";
+import { useEffect, useRef, ReactNode, useMemo } from "react";
+import { useAtom } from "jotai";
+import { readerSettingsAtom } from "@/system/atoms/readerSettings";
 import ImageBlock from "@/components/ImageBlock";
 import { Typography } from "@/components/ui";
-import { useToolbar } from "@/contexts/toolbar";
-import { useReaderSettings } from "@/contexts/readerSettings";
-import ReaderToolbar from "@/components/ReaderToolbar";
 import GiscusComments from "@/components/GiscusComments";
+import AppToolbar from "@/system/components/AppToolbar";
 import "katex/dist/katex.min.css";
 
 function formatDate(dateString: string, locale: string): string {
@@ -35,39 +35,21 @@ const fontFamilyMap: Record<string, string> = {
   system: "system-ui, -apple-system, sans-serif",
 };
 
-const ArticlePage = ({
-  id,
-  postProps,
-  postContent,
-  locale,
-}: {
+interface BookReaderAppProps {
   id: string;
   postProps: any;
   postContent: ReactNode;
   locale: string;
-}) => {
+}
+
+export default function BookReaderApp({
+  id,
+  postProps,
+  postContent,
+  locale,
+}: BookReaderAppProps) {
   const topRef = useRef<HTMLDivElement>(null);
-  const { setCustomToolbar } = useToolbar();
-  const { settings } = useReaderSettings();
-
-  // Set up custom reader toolbar
-  useEffect(() => {
-    if (postProps?.title) {
-      setCustomToolbar(
-        <ReaderToolbar
-          title={postProps.title}
-          onMenuClick={() => {
-            // TODO: Implement menu functionality
-            console.log("Menu clicked");
-          }}
-        />
-      );
-    }
-
-    return () => {
-      setCustomToolbar(null);
-    };
-  }, [postProps?.title, setCustomToolbar]);
+  const [settings] = useAtom(readerSettingsAtom);
 
   // Reset scroll position when navigating to article
   useEffect(() => {
@@ -108,7 +90,13 @@ const ArticlePage = ({
   if (!postProps) return null;
 
   return (
-    <div ref={topRef}>
+    <>
+      <AppToolbar
+        type="reader"
+        title={postProps?.title || ""}
+        onMenuClick={() => console.log("Menu clicked")}
+      />
+      <div ref={topRef}>
       <div className="overflow-hidden p-0">
         <div className="mt-1.5 -mx-2.5 [&_img]:object-cover [&_img]:w-full [&_img]:max-h-[40vh]">
           {typeof postProps.cover == "string" && (
@@ -143,7 +131,6 @@ const ArticlePage = ({
         </div>
       </div>
     </div>
+    </>
   );
-};
-
-export default ArticlePage;
+}

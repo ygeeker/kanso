@@ -51,18 +51,105 @@ This project uses `pnpm` as the package manager. Use `pnpm install` to install d
 - Middleware handles locale detection and routing: `src/middleware.ts`
 - Legacy locale redirects (`zh-CN` → `zh`, `en-US` → `en`) configured in `next.config.ts`
 
+### App-Based Architecture
+
+Kanso follows an Android-inspired "everything is an app" philosophy where each major section is implemented as an independent app with its own state and components.
+
+**Core Philosophy:**
+- Every page is conceptually an independent "app"
+- Apps share system-level state (theme, device settings, reader preferences)
+- Apps maintain their own app-specific state in isolation
+- Clean separation between shared system concerns and app-specific logic
+
+**Directory Structure:**
+
+```
+src/
+├── system/                        # System-level shared code
+│   ├── atoms/                     # Shared jotai state atoms
+│   │   ├── colorScheme.ts        # Theme state (light/dark)
+│   │   ├── deviceSettings.ts     # Wireless, device config
+│   │   ├── readerSettings.ts     # Typography, reading preferences
+│   │   └── toolbar.ts            # Custom toolbar state
+│   ├── components/
+│   │   ├── SystemLayout.tsx      # Root layout with jotai Provider
+│   │   ├── KindleBezel.tsx       # Kindle device frame wrapper
+│   │   ├── AppToolbar.tsx        # Declarative toolbar component
+│   │   └── StandardToolbar.tsx   # Standard Android-style toolbar
+│   └── contexts/
+│       └── dialogPortal.tsx      # Dialog portal context
+│
+├── apps/                          # Independent app implementations
+│   ├── launcher/                 # Home page app ("/" route)
+│   │   ├── index.tsx            # App entry point
+│   │   ├── atoms.ts             # Category filter state
+│   │   └── components/          # App-specific components
+│   │
+│   ├── book-reader/             # Article reader app ("/p/[slug]")
+│   │   ├── index.tsx
+│   │   ├── atoms.ts             # Scroll position, TOC state
+│   │   └── components/
+│   │       ├── ReaderToolbar.tsx
+│   │       └── ReaderSettingsSheet.tsx
+│   │
+│   ├── catalog/                 # Archive app ("/archive")
+│   │   ├── index.tsx
+│   │   └── components/
+│   │
+│   ├── browser/                 # Web browser app ("/browser")
+│   │   ├── index.tsx
+│   │   ├── atoms.ts             # URL history, navigation state
+│   │   └── components/
+│   │       └── BrowserToolbar.tsx
+│   │
+│   └── settings/                # Settings app ("/settings")
+│       ├── index.tsx
+│       └── components/
+│
+└── app/[locale]/                # Next.js routes (minimal, render apps)
+    ├── layout.tsx               # Root layout with SystemLayout
+    ├── page.tsx                 # Renders LauncherApp
+    ├── p/[slug]/page.tsx        # Renders BookReaderApp
+    ├── archive/page.tsx         # Renders CatalogApp
+    ├── browser/page.tsx         # Renders BrowserApp
+    └── settings/page.tsx        # Renders SettingsApp
+```
+
+**App Inventory:**
+
+1. **LauncherApp** (`/src/apps/launcher/`) - Home page with category filtering
+   - Uses default search toolbar
+   - Manages active category state
+
+2. **BookReaderApp** (`/src/apps/book-reader/`) - Article reading experience
+   - Custom reader toolbar with TOC and settings
+   - Reader-specific typography controls
+   - Manages scroll position and TOC visibility
+
+3. **CatalogApp** (`/src/apps/catalog/`) - Archive/list view
+   - Standard toolbar with back button
+   - Groups posts by year
+
+4. **BrowserApp** (`/src/apps/browser/`) - Embedded web browser
+   - Custom browser toolbar with address bar
+   - URL history and navigation state
+
+5. **SettingsApp** (`/src/apps/settings/`) - System settings
+   - Standard toolbar
+   - Manages wireless settings, device options, reading preferences
+
 ### Next.js App Router Structure
 
 ```
 src/app/
   [locale]/              # Locale-based routing
-    layout.tsx           # Root layout with NextIntlClientProvider
-    page.tsx             # Homepage
+    layout.tsx           # Root layout with jotai Provider + SystemLayout
+    page.tsx             # Renders LauncherApp
     p/[slug]/            # Blog post detail pages
-      page.tsx
-    archive/             # Archive/list view
-    browser/             # Category browser
-    settings/            # Reader settings
+      page.tsx           # Renders BookReaderApp
+    archive/page.tsx     # Renders CatalogApp
+    browser/page.tsx     # Renders BrowserApp
+    settings/page.tsx    # Renders SettingsApp
   rss.xml/route.ts       # RSS feed generation
   feed.xml/route.ts      # Alternative feed endpoint
   sitemap.ts             # Sitemap generation
@@ -82,28 +169,58 @@ src/app/
 - `src/utils/getCategories.ts` - Extract categories from posts
 - `src/utils/sortPosts.ts` - Sort posts by date
 
+### State Management with Jotai
+
+Kanso uses [jotai](https://jotai.org/) for atomic state management, replacing the previous React Context API.
+
+**System-Level Atoms** (`/src/system/atoms/`):
+
+1. **`colorScheme.ts`** - Theme state
+   ```typescript
+   export const colorSchemeAtom = atom<'light' | 'dark'>('light');
+   ```
+
+2. **`deviceSettings.ts`** - Wireless and device configuration
+   - `wirelessSettingsAtom` - Airplane mode, WiFi, Bluetooth state
+   - Action atoms: `setAirplaneModeAtom`, `setWifiEnabledAtom`, `setBluetoothEnabledAtom`
+
+3. **`readerSettings.ts`** - Typography and reading preferences
+   - `readerSettingsAtom` - Persisted to localStorage via `atomWithStorage`
+   - Theme presets: compact, comfortable, spacious
+   - Action atoms: `updateReaderSettingsAtom`, `applyThemePresetAtom`, `resetReaderSettingsAtom`
+
+4. **`toolbar.ts`** - Custom toolbar state
+   - `customToolbarAtom` - Manages which toolbar is displayed
+
+**App-Specific Atoms:**
+- Each app maintains its own state in `{app}/atoms.ts`
+- Examples: category filters (Launcher), scroll position (BookReader), URL history (Browser)
+
 ### Component Architecture
 
-**Layout Components:**
-- `src/components/Layout.tsx` - Main layout wrapper with Kindle bezel design
-- `src/components/Header/` - Site header with navigation
-- `src/components/Footer.tsx` - Site footer
+**System Components** (`/src/system/components/`):
+- `SystemLayout.tsx` - Root layout with jotai Provider, KindleBezel integration, toolbar management
+- `KindleBezel.tsx` - Kindle device frame wrapper
+- `AppToolbar.tsx` - Declarative toolbar component with type-based rendering
+- `StandardToolbar.tsx` - Android-style standard toolbar (back button, title, menu)
 
-**Content Components:**
-- `src/components/CodeBlock.tsx` - Syntax-highlighted code blocks
-- `src/components/ImageBlock.tsx` - Optimized image rendering
-- `src/components/TableBlock.tsx` - Table rendering
-- `src/components/HeadingBlock.tsx` - Heading with anchor links
+**Shared UI Components** (`/src/components/ui/`):
+- `Navbar/` - Navigation bar with StatusBar and Header components
+- `Dialog.tsx` - Modal dialog system
+- `Button.tsx`, `Switch.tsx`, `List.tsx` - Reusable UI primitives
 
-**Reader Experience:**
-- `src/components/KindleBezel.tsx` - Kindle device frame wrapper
-- `src/components/ReaderToolbar.tsx` - Reading controls toolbar
-- `src/components/ReaderSettingsSheet.tsx` - Reader customization settings
+**Content Components** (`/src/components/`):
+- `CodeBlock.tsx` - Syntax-highlighted code blocks
+- `ImageBlock.tsx` - Optimized image rendering with Next.js Image
+- `TableBlock.tsx` - Table rendering
+- `HeadingBlock.tsx` - Heading with anchor links
+- `GiscusComments.tsx` - Comment integration
+- `Header/` - Site header with search and navigation
+- `Typography.tsx` - Consistent typography wrapper
 
-**Context Providers:**
-- `src/contexts/colorScheme.ts` - Theme management (light/dark/e-ink modes)
-- `src/contexts/readerSettings.tsx` - Reader preferences (font, spacing)
-- `src/contexts/deviceSettings.tsx` - Device display settings
+**App-Specific Components:**
+- Each app has its own `components/` directory for isolated UI components
+- Examples: `ReaderToolbar` (BookReader), `CategoryLabel` (Launcher), `BrowserToolbar` (Browser)
 
 ### Styling
 
@@ -146,5 +263,26 @@ Key types in `src/types/index.d.ts`:
 
 ### Reader Features
 - Multiple reading modes (standard, e-ink simulation, dark mode)
-- Customizable typography settings stored in context
+- Customizable typography settings persisted to localStorage via jotai atoms
 - Kindle-inspired bezel design can be toggled via device settings
+- Declarative toolbar system with app-specific customization
+
+### Toolbar System
+
+Apps declare their toolbar using the `AppToolbar` component:
+
+```typescript
+// Standard toolbar (Settings, Catalog)
+<AppToolbar type="standard" title="Settings" onMenuClick={() => {}} />
+
+// Reader toolbar (BookReader)
+<AppToolbar type="reader" title={articleTitle} onMenuClick={() => {}} />
+
+// No custom toolbar - use default search (Launcher)
+<AppToolbar type="none" />
+
+// Browser manages its own toolbar internally
+<AppToolbar type="browser" />
+```
+
+The `AppToolbar` component internally manages the `customToolbarAtom` to switch between different toolbar types based on the active app.

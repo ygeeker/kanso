@@ -20,6 +20,7 @@
 		"dotenv": "^16.6.1",
 		"glob": "^11.1.0",
 		"gray-matter": "^4.0.3",
+		"jotai": "^2.16.1",
 		"katex": "^0.16.27",
 		"kindle-fonts": "latest",
 		"lucide-react": "^0.562.0",

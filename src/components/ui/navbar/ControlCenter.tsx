@@ -2,7 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { BatteryIcon } from "../Icons";
-import { useDeviceSettings } from "@/contexts/deviceSettings";
+import { useAtom, useSetAtom } from "jotai";
+import {
+  wirelessSettingsAtom,
+  setAirplaneModeAtom,
+  setWifiEnabledAtom,
+  setBluetoothEnabledAtom,
+} from "@/system/atoms/deviceSettings";
 import {
   AirplaneModeIcon,
   BluetoothIcon,
@@ -59,8 +65,10 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
   deviceName,
   battery,
 }) => {
-  const { wireless, setAirplaneMode, setWifiEnabled, setBluetoothEnabled } =
-    useDeviceSettings();
+  const [wireless] = useAtom(wirelessSettingsAtom);
+  const setAirplaneMode = useSetAtom(setAirplaneModeAtom);
+  const setWifiEnabled = useSetAtom(setWifiEnabledAtom);
+  const setBluetoothEnabled = useSetAtom(setBluetoothEnabledAtom);
   const [dateTime, setDateTime] = useState("");
 
   useEffect(() => {

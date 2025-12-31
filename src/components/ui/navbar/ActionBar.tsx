@@ -17,7 +17,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`flex items-center px-2 py-1 gap-1 ${className}`}>
+    <div
+      className={`flex items-center px-2 py-1 gap-1 border-b ${className}`}
+      style={{ borderColor: "var(--eink-ink-muted)" }}
+    >
       {children}
     </div>
   );

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Typography } from "@/components/ui";
 import { sortByDate } from "@/utils/sortPosts";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import AppToolbar from "@/system/components/AppToolbar";
 
 const groupByYear = (posts: any[]) => {
   return posts.reduce((acc, post) => {
@@ -17,18 +18,19 @@ const groupByYear = (posts: any[]) => {
   }, {} as Record<string, any[]>);
 };
 
-interface AllPostsProps {
+interface CatalogAppProps {
   allPosts: any[];
   flattedPosts: any[];
   locale: string;
 }
 
-const AllPost: React.FC<AllPostsProps> = ({
+export default function CatalogApp({
   allPosts,
   flattedPosts,
   locale,
-}) => {
+}: CatalogAppProps) {
   const t = useTranslations("archivePage");
+
   const sortedPosts = useMemo(() => sortByDate(flattedPosts), [flattedPosts]);
   const postsByYear = useMemo(() => groupByYear(sortedPosts), [sortedPosts]);
   const sortedYears = useMemo(
@@ -59,8 +61,14 @@ const AllPost: React.FC<AllPostsProps> = ({
 
   return (
     <>
-      <Typography>
-        <h1>{t("title")}</h1>
+      <AppToolbar
+        type="standard"
+        title="Archive"
+        onMenuClick={() => console.log("Menu clicked")}
+      />
+      <div className="px-4 md:px-6 pb-8">
+        <Typography>
+          <h1>{t("title")}</h1>
         <p>{localeLinks}</p>
         {sortedYears.map((year) => (
           <div key={year}>
@@ -76,9 +84,8 @@ const AllPost: React.FC<AllPostsProps> = ({
             </ul>
           </div>
         ))}
-      </Typography>
+        </Typography>
+      </div>
     </>
   );
-};
-
-export default AllPost;
+}

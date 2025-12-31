@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import { useAtom, useSetAtom } from "jotai";
 import {
-  useReaderSettings,
-  themePresets,
+  readerSettingsAtom,
+  updateReaderSettingsAtom,
+  applyThemePresetAtom,
   ReaderSettings,
-} from "@/contexts/readerSettings";
+} from "@/system/atoms/readerSettings";
 
 /**
  * Icons for the settings sheet
@@ -222,7 +224,8 @@ const FontOption: React.FC<FontOptionProps> = ({
  * Themes Tab Content
  */
 const ThemesTab: React.FC = () => {
-  const { settings, applyThemePreset } = useReaderSettings();
+  const [settings] = useAtom(readerSettingsAtom);
+  const applyThemePreset = useSetAtom(applyThemePresetAtom);
 
   const themes: {
     key: ReaderSettings["theme"];
@@ -265,7 +268,8 @@ const ThemesTab: React.FC = () => {
  * Font Tab Content
  */
 const FontTab: React.FC = () => {
-  const { settings, updateSettings } = useReaderSettings();
+  const [settings] = useAtom(readerSettingsAtom);
+  const updateSettings = useSetAtom(updateReaderSettingsAtom);
 
   const fonts: {
     key: ReaderSettings["fontFamily"];
@@ -335,7 +339,8 @@ const FontTab: React.FC = () => {
  * Layout Tab Content
  */
 const LayoutTab: React.FC = () => {
-  const { settings, updateSettings } = useReaderSettings();
+  const [settings] = useAtom(readerSettingsAtom);
+  const updateSettings = useSetAtom(updateReaderSettingsAtom);
 
   return (
     <div className="flex flex-col gap-2">

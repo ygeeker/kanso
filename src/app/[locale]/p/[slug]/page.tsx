@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { getPostBySlug, getAllPostSlugs } from "@/utils/getAllPosts";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import ArticleClient from "./client";
+import BookReaderApp from "@/apps/book-reader";
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -175,7 +175,7 @@ export default async function ArticlePage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ArticleClient
+      <BookReaderApp
         postContent={mdxContent}
         postProps={frontmatter}
         id={slug}

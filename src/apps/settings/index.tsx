@@ -1,11 +1,11 @@
 "use client";
 
 import { TLocale } from "@/types/index";
-import { 
-  List, 
-  ListItem, 
-  ListItemText, 
-  Section, 
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Section,
   SectionTitle,
   Switch,
   ChevronRightIcon,
@@ -13,22 +13,27 @@ import {
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { useDeviceSettings } from "@/contexts/deviceSettings";
+import { useAtom, useSetAtom } from "jotai";
+import {
+  wirelessSettingsAtom,
+  setAirplaneModeAtom,
+  setWifiEnabledAtom,
+  setBluetoothEnabledAtom,
+} from "@/system/atoms/deviceSettings";
+import AppToolbar from "@/system/components/AppToolbar";
 
-interface HomePageProps {
+interface SettingsAppProps {
   locale: TLocale;
 }
 
-const SettingsPage = (props: HomePageProps) => {
+export default function SettingsApp(props: SettingsAppProps) {
   const t = useTranslations("settingsPage");
 
-  // Get wireless settings from context (controls status bar)
-  const { 
-    wireless, 
-    setAirplaneMode, 
-    setWifiEnabled, 
-    setBluetoothEnabled 
-  } = useDeviceSettings();
+  // Get wireless settings from jotai atoms
+  const [wireless] = useAtom(wirelessSettingsAtom);
+  const setAirplaneMode = useSetAtom(setAirplaneModeAtom);
+  const setWifiEnabled = useSetAtom(setWifiEnabledAtom);
+  const setBluetoothEnabled = useSetAtom(setBluetoothEnabledAtom);
 
   // Local states for other settings
   const [pageRefresh, setPageRefresh] = useState(true);
@@ -36,39 +41,45 @@ const SettingsPage = (props: HomePageProps) => {
   const [parentalControls, setParentalControls] = useState(false);
 
   return (
-    <div className="pb-8">
+    <>
+      <AppToolbar
+        type="standard"
+        title="Settings"
+        onMenuClick={() => console.log("Menu clicked")}
+      />
+      <div className="pb-8 px-4 md:px-6">
       {/* Wireless Section */}
       <Section>
         <SectionTitle>Wireless</SectionTitle>
         <List>
           <ListItem>
-            <ListItemText 
-              primary="Airplane Mode" 
+            <ListItemText
+              primary="Airplane Mode"
               secondary="Disable all wireless connections"
             />
-            <Switch 
-              checked={wireless.airplaneMode} 
+            <Switch
+              checked={wireless.airplaneMode}
               onChange={setAirplaneMode}
             />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Wi-Fi" 
+            <ListItemText
+              primary="Wi-Fi"
               secondary={wireless.wifiEnabled ? `Connected to ${wireless.wifiNetwork}` : "Off"}
             />
-            <Switch 
-              checked={wireless.wifiEnabled} 
+            <Switch
+              checked={wireless.wifiEnabled}
               onChange={setWifiEnabled}
               disabled={wireless.airplaneMode}
             />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Bluetooth" 
+            <ListItemText
+              primary="Bluetooth"
               secondary={wireless.bluetoothEnabled ? "On" : "Off"}
             />
-            <Switch 
-              checked={wireless.bluetoothEnabled} 
+            <Switch
+              checked={wireless.bluetoothEnabled}
               onChange={setBluetoothEnabled}
               disabled={wireless.airplaneMode}
             />
@@ -81,29 +92,29 @@ const SettingsPage = (props: HomePageProps) => {
         <SectionTitle>Device Options</SectionTitle>
         <List>
           <ListItem>
-            <ListItemText 
-              primary="Device Name" 
+            <ListItemText
+              primary="Device Name"
               secondary="River's Kindle"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Language and Dictionaries" 
+            <ListItemText
+              primary="Language and Dictionaries"
               secondary="English (United States)"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Date and Time" 
+            <ListItemText
+              primary="Date and Time"
               secondary="Set automatically"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Device Passcode" 
+            <ListItemText
+              primary="Device Passcode"
               secondary="Off"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
@@ -113,8 +124,8 @@ const SettingsPage = (props: HomePageProps) => {
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Reset Device" 
+            <ListItemText
+              primary="Reset Device"
               secondary="Restore to factory defaults"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
@@ -127,36 +138,36 @@ const SettingsPage = (props: HomePageProps) => {
         <SectionTitle>Display Settings</SectionTitle>
         <List>
           <ListItem>
-            <ListItemText 
-              primary="Font Size" 
+            <ListItemText
+              primary="Font Size"
               secondary="Size 4 of 14"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Bold" 
+            <ListItemText
+              primary="Bold"
               secondary="Level 2 of 5"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Page Refresh" 
+            <ListItemText
+              primary="Page Refresh"
               secondary="Refresh every page turn"
             />
-            <Switch 
-              checked={pageRefresh} 
+            <Switch
+              checked={pageRefresh}
               onChange={setPageRefresh}
             />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Show Cover" 
+            <ListItemText
+              primary="Show Cover"
               secondary="Display book cover on lock screen"
             />
-            <Switch 
-              checked={showCover} 
+            <Switch
+              checked={showCover}
               onChange={setShowCover}
             />
           </ListItem>
@@ -168,29 +179,29 @@ const SettingsPage = (props: HomePageProps) => {
         <SectionTitle>Reading Options</SectionTitle>
         <List>
           <ListItem>
-            <ListItemText 
-              primary="Popular Highlights" 
+            <ListItemText
+              primary="Popular Highlights"
               secondary="Off"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Vocabulary Builder" 
+            <ListItemText
+              primary="Vocabulary Builder"
               secondary="On"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Page Turn Buttons" 
+            <ListItemText
+              primary="Page Turn Buttons"
               secondary="Standard"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Reading Progress" 
+            <ListItemText
+              primary="Reading Progress"
               secondary="Location in book"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
@@ -203,12 +214,12 @@ const SettingsPage = (props: HomePageProps) => {
         <SectionTitle>Parental Controls</SectionTitle>
         <List>
           <ListItem>
-            <ListItemText 
-              primary="Parental Controls" 
+            <ListItemText
+              primary="Parental Controls"
               secondary={parentalControls ? "On" : "Off"}
             />
-            <Switch 
-              checked={parentalControls} 
+            <Switch
+              checked={parentalControls}
               onChange={setParentalControls}
             />
           </ListItem>
@@ -221,8 +232,8 @@ const SettingsPage = (props: HomePageProps) => {
         <List>
           <Link href="/rss/feed.xml">
             <ListItem>
-              <ListItemText 
-                primary="RSS Feed" 
+              <ListItemText
+                primary="RSS Feed"
                 secondary="Subscribe via XML"
               />
               <ChevronRightIcon size={18} className="opacity-40" />
@@ -230,8 +241,8 @@ const SettingsPage = (props: HomePageProps) => {
           </Link>
           <a href="https://github.com/nicepkg/kanso" target="_blank" rel="noopener noreferrer">
             <ListItem>
-              <ListItemText 
-                primary={t("openSource")} 
+              <ListItemText
+                primary={t("openSource")}
                 secondary="View on GitHub"
               />
               <ChevronRightIcon size={18} className="opacity-40" />
@@ -264,33 +275,32 @@ const SettingsPage = (props: HomePageProps) => {
         <SectionTitle>Device Info</SectionTitle>
         <List>
           <ListItem>
-            <ListItemText 
-              primary="Serial Number" 
+            <ListItemText
+              primary="Serial Number"
               secondary="G000AB1234567890"
             />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Wi-Fi MAC Address" 
+            <ListItemText
+              primary="Wi-Fi MAC Address"
               secondary="00:11:22:33:44:55"
             />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Firmware Version" 
+            <ListItemText
+              primary="Firmware Version"
               secondary="Kindle 5.16.2.1.1"
             />
           </ListItem>
           <ListItem>
-            <ListItemText 
-              primary="Available Storage" 
+            <ListItemText
+              primary="Available Storage"
               secondary="6.2 GB of 8 GB"
             />
           </ListItem>
         </List>
       </Section>
     </div>
+    </>
   );
-};
-
-export default SettingsPage;
+}

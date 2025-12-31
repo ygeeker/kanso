@@ -1,6 +1,6 @@
 import { TLocale } from "@/types/index";
 import { setRequestLocale } from "next-intl/server";
-import SettingsClient from "./client";
+import SettingsApp from "@/apps/settings";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -12,5 +12,5 @@ export default async function SettingsPage({ params }: PageProps) {
   // Enable static rendering
   setRequestLocale(locale);
 
-  return <SettingsClient locale={locale as TLocale} />;
+  return <SettingsApp locale={locale as TLocale} />;
 }

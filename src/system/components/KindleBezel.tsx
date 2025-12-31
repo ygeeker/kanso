@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { DialogPortalContext } from "@/contexts/dialogPortal";
+import { DialogPortalContext } from "@/system/contexts/dialogPortal";
 
 interface KindleBezelProps {
   children: React.ReactNode;
@@ -122,11 +122,11 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
             <div
               className="absolute top-0 left-4 right-4 h-[2px] rounded-full"
               style={{
-                background: `linear-gradient(90deg, 
-                  transparent 0%, 
-                  rgba(255,255,255,0.15) 20%, 
+                background: `linear-gradient(90deg,
+                  transparent 0%,
+                  rgba(255,255,255,0.15) 20%,
                   rgba(255,255,255,0.2) 50%,
-                  rgba(255,255,255,0.15) 80%, 
+                  rgba(255,255,255,0.15) 80%,
                   transparent 100%)`,
               }}
             />
@@ -135,11 +135,11 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
             <div
               className="absolute left-0 top-4 bottom-4 w-[2px] rounded-full"
               style={{
-                background: `linear-gradient(180deg, 
-                  transparent 0%, 
-                  rgba(255,255,255,0.1) 20%, 
+                background: `linear-gradient(180deg,
+                  transparent 0%,
+                  rgba(255,255,255,0.1) 20%,
                   rgba(255,255,255,0.12) 50%,
-                  rgba(255,255,255,0.1) 80%, 
+                  rgba(255,255,255,0.1) 80%,
                   transparent 100%)`,
               }}
             />
@@ -148,11 +148,11 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
             <div
               className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full"
               style={{
-                background: `linear-gradient(90deg, 
-                  transparent 0%, 
-                  rgba(0,0,0,0.15) 20%, 
+                background: `linear-gradient(90deg,
+                  transparent 0%,
+                  rgba(0,0,0,0.15) 20%,
                   rgba(0,0,0,0.2) 50%,
-                  rgba(0,0,0,0.15) 80%, 
+                  rgba(0,0,0,0.15) 80%,
                   transparent 100%)`,
               }}
             />
@@ -266,8 +266,8 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
             <div
               className="absolute top-0 left-0 right-4 h-[2px]"
               style={{
-                background: `linear-gradient(90deg, 
-                  rgba(255,255,255,0.1) 0%, 
+                background: `linear-gradient(90deg,
+                  rgba(255,255,255,0.1) 0%,
                   rgba(255,255,255,0.15) 50%,
                   transparent 100%)`,
               }}
@@ -277,11 +277,11 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
             <div
               className="absolute top-6 bottom-6 right-0 w-[2px] rounded-full"
               style={{
-                background: `linear-gradient(180deg, 
-                  transparent 0%, 
-                  rgba(255,255,255,0.12) 20%, 
+                background: `linear-gradient(180deg,
+                  transparent 0%,
+                  rgba(255,255,255,0.12) 20%,
                   rgba(255,255,255,0.15) 50%,
-                  rgba(255,255,255,0.12) 80%, 
+                  rgba(255,255,255,0.12) 80%,
                   transparent 100%)`,
               }}
             />
@@ -290,8 +290,8 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
             <div
               className="absolute bottom-0 left-0 right-4 h-[2px]"
               style={{
-                background: `linear-gradient(90deg, 
-                  rgba(0,0,0,0.15) 0%, 
+                background: `linear-gradient(90deg,
+                  rgba(0,0,0,0.15) 0%,
                   rgba(0,0,0,0.2) 50%,
                   transparent 100%)`,
               }}
@@ -305,8 +305,8 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
                 style={{
                   width: "8px",
                   height: "72px",
-                  background: `linear-gradient(90deg, 
-                    var(--bezel-button) 0%, 
+                  background: `linear-gradient(90deg,
+                    var(--bezel-button) 0%,
                     var(--bezel-button-edge) 50%,
                     var(--bezel-button) 100%)`,
                   borderRadius: "4px",
@@ -327,8 +327,8 @@ const KindleBezel: React.FC<KindleBezelProps> = ({
                 style={{
                   width: "8px",
                   height: "72px",
-                  background: `linear-gradient(90deg, 
-                    var(--bezel-button) 0%, 
+                  background: `linear-gradient(90deg,
+                    var(--bezel-button) 0%,
                     var(--bezel-button-edge) 50%,
                     var(--bezel-button) 100%)`,
                   borderRadius: "4px",

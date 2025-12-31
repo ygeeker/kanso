@@ -2,7 +2,7 @@ import React from "react";
 import getAllPosts from "@/utils/getAllPosts";
 import type { TLocale } from "@/types/index";
 import { setRequestLocale } from "next-intl/server";
-import ArchiveClient from "./client";
+import CatalogApp from "@/apps/catalog";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -20,7 +20,7 @@ export default async function ArchivePage({ params }: PageProps) {
   });
 
   return (
-    <ArchiveClient
+    <CatalogApp
       allPosts={allPosts}
       flattedPosts={allPosts}
       locale={locale}

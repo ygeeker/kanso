@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { BatteryIcon, WifiIcon } from "../Icons";
-import { useDeviceSettings } from "@/contexts/deviceSettings";
+import { useAtom } from "jotai";
+import { wirelessSettingsAtom } from "@/system/atoms/deviceSettings";
 import { ControlCenter } from "./ControlCenter";
 import {
   AirplaneModeIcon,
@@ -26,7 +27,7 @@ export const StatuBar: React.FC<StatusBarProps> = ({
 }) => {
   const [time, setTime] = useState("");
   const [controlCenterOpen, setControlCenterOpen] = useState(false);
-  const { wireless } = useDeviceSettings();
+  const [wireless] = useAtom(wirelessSettingsAtom);
 
   useEffect(() => {
     const updateTime = () => {

@@ -2,9 +2,19 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useAtom, useSetAtom } from "jotai";
+import { customToolbarAtom } from "@/system/atoms/toolbar";
+import {
+  currentUrlAtom,
+  urlInputAtom,
+  browserHistoryAtom,
+  historyIndexAtom,
+  isLoadingAtom,
+  canGoBackAtom,
+  canGoForwardAtom,
+} from "./atoms";
 import { CloseIcon } from "@/components/ui/Icons";
 import { ActionBar } from "@/components/ui";
-import { useToolbar } from "@/contexts/toolbar";
 
 /**
  * Kindle-style Browser Icons
@@ -136,7 +146,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({
 };
 
 /**
- * Browser Toolbar Component - Replaces the default ActionBar
+ * Browser Toolbar Component
  */
 interface BrowserToolbarProps {
   url: string;
@@ -169,7 +179,6 @@ const BrowserToolbar: React.FC<BrowserToolbarProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // URL normalization is handled in navigateTo
     onNavigate(inputValue);
     inputRef.current?.blur();
   };
@@ -180,11 +189,10 @@ const BrowserToolbar: React.FC<BrowserToolbarProps> = ({
 
   return (
     <ActionBar>
-      {/* Navigation buttons */}
       <ToolbarButton onClick={onBack} disabled={!canGoBack} title="Go back">
         <ArrowBackIcon size={18} />
       </ToolbarButton>
-      
+
       <ToolbarButton onClick={onForward} disabled={!canGoForward} title="Go forward">
         <ArrowForwardIcon size={18} />
       </ToolbarButton>
@@ -193,7 +201,6 @@ const BrowserToolbar: React.FC<BrowserToolbarProps> = ({
         <RefreshIcon size={16} />
       </ToolbarButton>
 
-      {/* Address bar */}
       <form onSubmit={handleSubmit} className="flex-1 mx-2">
         <input
           ref={inputRef}
@@ -212,12 +219,10 @@ const BrowserToolbar: React.FC<BrowserToolbarProps> = ({
         />
       </form>
 
-      {/* Open in new tab button */}
       <ToolbarButton onClick={onOpenExternal} disabled={!url} title="Open in new tab">
         <ExternalLinkIcon size={16} />
       </ToolbarButton>
 
-      {/* Close button */}
       <ToolbarButton onClick={onClose} title="Close browser">
         <CloseIcon size={18} />
       </ToolbarButton>
@@ -226,14 +231,13 @@ const BrowserToolbar: React.FC<BrowserToolbarProps> = ({
 };
 
 /**
- * Helper to normalize URL - adds https:// if protocol is missing
+ * Helper to normalize URL
  */
 function normalizeUrl(url: string): string {
   if (!url) return "";
   const trimmed = url.trim();
   if (!trimmed) return "";
-  
-  // Add protocol if missing
+
   if (!trimmed.match(/^https?:\/\//)) {
     return "https://" + trimmed;
   }
@@ -241,59 +245,66 @@ function normalizeUrl(url: string): string {
 }
 
 /**
- * Main Browser Client Component
- * Uses toolbar context to replace the default ActionBar while keeping global StatusBar
+ * Main Browser App Component
  */
-interface BrowserClientProps {
+interface BrowserAppProps {
   locale: string;
 }
 
-export default function BrowserClient({ locale }: BrowserClientProps) {
+export default function BrowserApp({ locale }: BrowserAppProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setCustomToolbar } = useToolbar();
-  
-  // Normalize the initial URL to ensure it has a protocol
-  const rawUrl = searchParams.get("url") || "";
-  const initialUrl = normalizeUrl(rawUrl);
-  
-  const [currentUrl, setCurrentUrl] = useState(initialUrl);
-  const [inputValue, setInputValue] = useState(rawUrl); // Keep raw URL in input for display
-  const [history, setHistory] = useState<string[]>(initialUrl ? [initialUrl] : []);
-  const [historyIndex, setHistoryIndex] = useState(initialUrl ? 0 : -1);
-  const [isLoading, setIsLoading] = useState(false);
+  const setCustomToolbar = useSetAtom(customToolbarAtom);
+
+  const [currentUrl, setCurrentUrl] = useAtom(currentUrlAtom);
+  const [inputValue, setInputValue] = useAtom(urlInputAtom);
+  const [history, setHistory] = useAtom(browserHistoryAtom);
+  const [historyIndex, setHistoryIndex] = useAtom(historyIndexAtom);
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
+  const [canGoBack] = useAtom(canGoBackAtom);
+  const [canGoForward] = useAtom(canGoForwardAtom);
+
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Initialize from URL params
+  useEffect(() => {
+    const rawUrl = searchParams.get("url") || "";
+    const initialUrl = normalizeUrl(rawUrl);
+    if (initialUrl && currentUrl !== initialUrl) {
+      setCurrentUrl(initialUrl);
+      setInputValue(rawUrl);
+      setHistory([initialUrl]);
+      setHistoryIndex(0);
+    }
+  }, [searchParams]);
 
   const navigateTo = (url: string) => {
     if (!url) return;
-    
-    // Normalize URL to ensure it has protocol
+
     const normalizedUrl = normalizeUrl(url);
     if (!normalizedUrl) return;
-    
+
     setIsLoading(true);
     setCurrentUrl(normalizedUrl);
     setInputValue(normalizedUrl);
-    
-    // Add to history
+
     const newHistory = [...history.slice(0, historyIndex + 1), normalizedUrl];
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
-    
-    // Update URL params
+
     const params = new URLSearchParams(searchParams.toString());
     params.set("url", normalizedUrl);
     router.replace(`/${locale}/browser?${params.toString()}`, { scroll: false });
   };
 
   const goBack = () => {
-    if (historyIndex > 0) {
+    if (canGoBack) {
       const newIndex = historyIndex - 1;
       setHistoryIndex(newIndex);
       const url = history[newIndex];
       setCurrentUrl(url);
       setInputValue(url);
-      
+
       const params = new URLSearchParams(searchParams.toString());
       params.set("url", url);
       router.replace(`/${locale}/browser?${params.toString()}`, { scroll: false });
@@ -301,13 +312,13 @@ export default function BrowserClient({ locale }: BrowserClientProps) {
   };
 
   const goForward = () => {
-    if (historyIndex < history.length - 1) {
+    if (canGoForward) {
       const newIndex = historyIndex + 1;
       setHistoryIndex(newIndex);
       const url = history[newIndex];
       setCurrentUrl(url);
       setInputValue(url);
-      
+
       const params = new URLSearchParams(searchParams.toString());
       params.set("url", url);
       router.replace(`/${locale}/browser?${params.toString()}`, { scroll: false });
@@ -335,7 +346,7 @@ export default function BrowserClient({ locale }: BrowserClientProps) {
     setIsLoading(false);
   };
 
-  // Set up custom toolbar when component mounts, clean up on unmount
+  // Set up custom toolbar
   useEffect(() => {
     setCustomToolbar(
       <BrowserToolbar
@@ -348,32 +359,37 @@ export default function BrowserClient({ locale }: BrowserClientProps) {
         onRefresh={refresh}
         onOpenExternal={handleOpenExternal}
         onClose={handleClose}
-        canGoBack={historyIndex > 0}
-        canGoForward={historyIndex < history.length - 1}
+        canGoBack={canGoBack}
+        canGoForward={canGoForward}
       />
     );
 
     return () => {
       setCustomToolbar(null);
+      // Reset browser state on unmount
+      setCurrentUrl('');
+      setInputValue('');
+      setHistory([]);
+      setHistoryIndex(-1);
+      setIsLoading(false);
     };
-  }, [currentUrl, inputValue, historyIndex, history.length]);
+  }, [currentUrl, inputValue, historyIndex, history.length, canGoBack, canGoForward]);
 
   return (
-    <div 
+    <div
       className="absolute inset-0"
       style={{
         backgroundColor: "var(--eink-paper)",
       }}
     >
-      {/* Loading indicator */}
       {isLoading && (
-        <div 
+        <div
           className="absolute top-0 left-0 right-0 h-0.5 z-10"
           style={{ backgroundColor: "var(--eink-ink-muted)" }}
         >
-          <div 
+          <div
             className="h-full"
-            style={{ 
+            style={{
               backgroundColor: "var(--eink-ink)",
               width: "30%",
               animation: "pulse 1.5s ease-in-out infinite",
@@ -382,18 +398,12 @@ export default function BrowserClient({ locale }: BrowserClientProps) {
         </div>
       )}
 
-      {/* Empty state */}
       {!currentUrl && (
-        <div 
+        <div
           className="flex flex-col items-center justify-center h-full p-8 text-center"
           style={{ color: "var(--eink-ink-muted)" }}
         >
-          <div 
-            className="text-6xl mb-4 opacity-20"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            🌐
-          </div>
+          <div className="text-6xl mb-4 opacity-20">🌐</div>
           <p className="text-sm font-sans mb-2">
             Enter a URL in the address bar to start browsing
           </p>
@@ -403,7 +413,6 @@ export default function BrowserClient({ locale }: BrowserClientProps) {
         </div>
       )}
 
-      {/* Iframe */}
       {currentUrl && (
         <iframe
           ref={iframeRef}
