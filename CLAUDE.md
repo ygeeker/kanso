@@ -32,7 +32,7 @@ This project uses `pnpm` as the package manager. Use `pnpm install` to install d
 
 2. **Notion Database** (optional):
    - Configured via `NOTION_API_KEY` and `NOTION_DATABASE_ID` environment variables
-   - Auto-syncs on push to master branch and daily at 13:00 UTC via GitHub Actions
+   - Auto-syncs on push to main branch and daily at 13:00 UTC via GitHub Actions
    - Sync script: `src/utils/notion.js`
    - Converts Notion blocks to Markdown and saves to `/posts/{locale}/` directory
    - Downloads and stores images in `/public/image/post/`
@@ -257,7 +257,7 @@ Key types in `src/types/index.d.ts`:
 
 ### Notion Integration
 - Notion sync requires two environment variables in GitHub Secrets
-- Sync workflow runs automatically on push to master and daily
+- Sync workflow runs automatically on push to main and daily
 - Images from Notion are downloaded to `/public/image/post/` with filename format: `{block_id}_{original_name}`
 - Notion equations are converted to KaTeX-compatible `$$` syntax
 

@@ -3,7 +3,7 @@ name: Node GitHub CI
 on:
     push:
         branches:
-            - master
+            - main
 
 jobs:
     deploy:
@@ -21,7 +21,7 @@ jobs:
                   script: |
                       cd /app/ygk-blog
                       rm -rf package-lock.json
-                      git pull origin master
+                      git pull origin main
                       npm install --production
                       npm run build
                       kill $(lsof -t -i:4000)
