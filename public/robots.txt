@@ -2,11 +2,11 @@
 
 # Allow all crawlers access to all content
 User-agent: *
-Disallow:
+Disallow: /settings
 
 # Disallow crawling of specific directories or pages
 # Disallow: /private/
 # Disallow: /hidden-page.html
 
 # Sitemap (optional, but recommended)
-# Sitemap: https://www.yoursite.com/sitemap.xml
+Sitemap: https://rene.wang/sitemap.xml
