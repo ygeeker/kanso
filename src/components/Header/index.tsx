@@ -82,6 +82,16 @@ const Header: React.FC<HeaderProps> = ({ menuItems = [] }) => {
       <ActionBarMenu
         items={[
           {
+            textPrimary: "Twitter",
+            component: "a",
+            href: "https://x.com/renedotwang",
+          },
+          {
+            textPrimary: "GitHub",
+            component: "a",
+            href: "https://github.com/rivertwilight",
+          },
+          {
             textPrimary: t("nav.homePage"),
             onClick: () => router.push("/"),
           },
@@ -91,21 +101,6 @@ const Header: React.FC<HeaderProps> = ({ menuItems = [] }) => {
           },
           ...menuItems,
           ...pageMenuItems,
-          {
-            textPrimary: "GitHub",
-            component: "a",
-            href: "https://github.com/rivertwilight",
-          },
-          {
-            textPrimary: "Pixiv",
-            component: "a",
-            href: "https://www.pixiv.net/en/users/35572742",
-          },
-          {
-            textPrimary: "X",
-            component: "a",
-            href: "https://x.com/renedotwang",
-          },
           // {
           //   textPrimary: t("nav.about.title"),
           //   onClick: handleClick,

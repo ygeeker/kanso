@@ -124,12 +124,9 @@ export const ReaderToolbar: React.FC<ReaderToolbarProps> = ({
 					<ActionBarMenu
 						items={[
 							{
-								textPrimary: t("nav.homePage"),
-								onClick: () => router.push("/"),
-							},
-							{
-								textPrimary: t("nav.settings"),
-								onClick: () => router.push("/settings"),
+								textPrimary: "Twitter",
+								component: "a",
+								href: "https://x.com/renedotwang",
 							},
 							{
 								textPrimary: "GitHub",
@@ -137,14 +134,12 @@ export const ReaderToolbar: React.FC<ReaderToolbarProps> = ({
 								href: "https://github.com/rivertwilight",
 							},
 							{
-								textPrimary: "Pixiv",
-								component: "a",
-								href: "https://www.pixiv.net/en/users/35572742",
+								textPrimary: t("nav.homePage"),
+								onClick: () => router.push("/"),
 							},
 							{
-								textPrimary: "X",
-								component: "a",
-								href: "https://x.com/renewang",
+								textPrimary: t("nav.settings"),
+								onClick: () => router.push("/settings"),
 							},
 						]}
 					/>
