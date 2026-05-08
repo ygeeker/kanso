@@ -38,7 +38,6 @@ export default function SettingsApp(props: SettingsAppProps) {
   // Local states for other settings
   const [pageRefresh, setPageRefresh] = useState(true);
   const [showCover, setShowCover] = useState(true);
-  const [parentalControls, setParentalControls] = useState(false);
 
   return (
     <>
@@ -205,23 +204,6 @@ export default function SettingsApp(props: SettingsAppProps) {
               secondary="Location in book"
             />
             <ChevronRightIcon size={18} className="opacity-40" />
-          </ListItem>
-        </List>
-      </Section>
-
-      {/* Parental Controls Section */}
-      <Section>
-        <SectionTitle>Parental Controls</SectionTitle>
-        <List>
-          <ListItem>
-            <ListItemText
-              primary="Parental Controls"
-              secondary={parentalControls ? "On" : "Off"}
-            />
-            <Switch
-              checked={parentalControls}
-              onChange={setParentalControls}
-            />
           </ListItem>
         </List>
       </Section>
