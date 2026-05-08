@@ -22,7 +22,7 @@
 		"@notionhq/client": "^2.3.0",
 		"@types/mdx": "^2.0.13",
 		"@vercel/analytics": "^1.6.1",
-		"axios": "^1.13.2",
+		"axios": "^1.15.2",
 		"dotenv": "^16.6.1",
 		"glob": "^13.0.0",
 		"gray-matter": "^4.0.3",
