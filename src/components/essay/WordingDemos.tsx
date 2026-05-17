@@ -1047,6 +1047,90 @@ export function SynonymContinueB() {
 	return <CheckoutStep buttonLabel="Continue to payment" />;
 }
 
+/* ─── 17. Consistency ─── */
+
+type TeamMember = { name: string; rowAction: string };
+
+function TeamMembersPanel({
+	title,
+	searchPlaceholder,
+	inviteLabel,
+	members,
+}: {
+	title: string;
+	searchPlaceholder: string;
+	inviteLabel: string;
+	members: TeamMember[];
+}) {
+	return (
+		<div className="font-demo p-5 bg-white text-neutral-900">
+			<div className="flex items-center justify-between mb-3">
+				<div className="text-sm font-bold">{title}</div>
+				<button className="py-1.5 px-3 bg-neutral-900 text-white text-[12px] font-medium rounded-md">
+					{inviteLabel}
+				</button>
+			</div>
+			<div className="relative mb-3">
+				<Search
+					size={13}
+					className="absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-400"
+				/>
+				<div className="w-full border border-neutral-300 py-1.5 pl-7 pr-3 text-[12px] text-neutral-400 rounded-md">
+					{searchPlaceholder}
+				</div>
+			</div>
+			<div>
+				{members.map((m, i) => (
+					<div
+						key={i}
+						className="flex items-center justify-between py-2 border-b border-neutral-200 last:border-b-0"
+					>
+						<div className="flex items-center gap-2">
+							<div className="w-6 h-6 rounded-full bg-neutral-200" />
+							<span className="text-[13px] text-neutral-900">
+								{m.name}
+							</span>
+						</div>
+						<button className="text-[12px] text-neutral-600 px-2 py-1 rounded hover:bg-neutral-100">
+							{m.rowAction}
+						</button>
+					</div>
+				))}
+			</div>
+		</div>
+	);
+}
+
+export function ConsistencyA() {
+	return (
+		<TeamMembersPanel
+			title="Team Members"
+			searchPlaceholder="Search users..."
+			inviteLabel="Invite teammate"
+			members={[
+				{ name: "Jane Doe", rowAction: "Remove" },
+				{ name: "Alex Park", rowAction: "Kick out" },
+				{ name: "Sam Lee", rowAction: "Delete user" },
+			]}
+		/>
+	);
+}
+
+export function ConsistencyB() {
+	return (
+		<TeamMembersPanel
+			title="Members"
+			searchPlaceholder="Search members..."
+			inviteLabel="Invite member"
+			members={[
+				{ name: "Jane Doe", rowAction: "Remove member" },
+				{ name: "Alex Park", rowAction: "Remove member" },
+				{ name: "Sam Lee", rowAction: "Remove member" },
+			]}
+		/>
+	);
+}
+
 /* ─── CSS injection ─── */
 
 export function DetailDemoStyles() {

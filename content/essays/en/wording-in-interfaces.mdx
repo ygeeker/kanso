@@ -50,6 +50,8 @@ import {
 	SynonymRetryB,
 	SynonymContinueA,
 	SynonymContinueB,
+	ConsistencyA,
+	ConsistencyB,
 	NewsletterPlaceholderA,
 	NewsletterPlaceholderB,
 } from "@/components/essay/WordingDemos";
@@ -414,7 +416,6 @@ Every row below is a different sub-problem. Try the toggles.
 	explanation={
 		<>
 			<p>
-				When the product is slow, the copy <em>is</em> the product.
 				Loading copy is the only moment where the interface has to
 				justify its own existence in real time.
 			</p>
@@ -586,6 +587,42 @@ English is full of near-synonyms that dictionaries treat as interchangeable but 
 	</ComparisonOption>
 	<ComparisonOption>
 		<SynonymContinueB />
+	</ComparisonOption>
+</DetailComparison>
+
+## Consistency
+
+The other side of synonyms: once you've picked a word, use it everywhere. Varying the noun or verb for the same thing makes users wonder if you mean something different.
+
+<DetailComparison
+	answer="B"
+	direction="vertical"
+	explanation={
+		<>
+			<p>
+				Four references to the same concept on one screen, four different
+				words. "Team Members," "users," "teammate," and three different row
+				actions ("Remove," "Kick out," "Delete user"). Each one is fine in
+				isolation. Together, they force the reader to ask: is "Kick out"
+				the same as "Remove"? Does "Delete user" also delete their
+				content? Inconsistency creates micro-doubt at every glance.
+			</p>
+			<p>
+				B picks one noun ("member") and one verb ("Remove member") and
+				holds them across the whole panel. The user learns the model once
+				and trusts it for every subsequent interaction. A glossary of one
+				term is cheaper than asking every reader to verify whether your
+				synonyms are intentional. Consistency is not a style preference —
+				it's a contract that lets users stop reading carefully.
+			</p>
+		</>
+	}
+>
+	<ComparisonOption>
+		<ConsistencyA />
+	</ComparisonOption>
+	<ComparisonOption>
+		<ConsistencyB />
 	</ComparisonOption>
 </DetailComparison>
 
